@@ -17,7 +17,8 @@ model Postagem {
   foto        String
   estadoId    Int
   cidadeId    Int
-  email       String 
+  email       String
+  nome        String
   createdAt   DateTime @default(now())
 
   @@map("postagens")

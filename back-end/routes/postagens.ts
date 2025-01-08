@@ -32,8 +32,14 @@ const getCidadePorId = async (estadoId: number, cidadeId: number) => {
 };
 
 router.get("/", async (req: Request, res: Response) => {
+  const { estadoId, cidadeId } = req.query;
+
   try {
     const postagens = await prisma.postagem.findMany({
+      where: {
+        ...(estadoId ? { estadoId: Number(estadoId) } : {}),
+        ...(cidadeId ? { cidadeId: Number(cidadeId) } : {}),
+      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -57,7 +63,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const { titulo, email, descricao, localizacao, foto, estadoId, cidadeId } = req.body;
+  const { titulo, email, descricao, localizacao, foto, estadoId, cidadeId, nome } = req.body;
 
   const isValidUrl = (url: string) => {
     try {
@@ -96,6 +102,7 @@ router.post("/", async (req: Request, res: Response) => {
         foto,
         estadoId,
         cidadeId,
+        nome,
       },
     });
 

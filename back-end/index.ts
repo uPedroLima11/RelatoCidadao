@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import estadosRoutes from "./routes/estados";
 import postagensRoutes from "./routes/postagens";
+
 const app = express();
 const PORT = 3004;
 
