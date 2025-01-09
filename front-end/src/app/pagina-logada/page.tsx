@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Postagens from "../components/ListarPostagens";
 
 interface HomeProps {
   estadoId: number | null;

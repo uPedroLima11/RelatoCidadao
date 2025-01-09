@@ -48,7 +48,9 @@ const Navbar: React.FC<NavbarProps> = ({ onFiltrar, onRemoverFiltro }) => {
   }, [estadoSelecionado]);
 
   const handleFiltrar = () => {
-    onFiltrar(estadoSelecionado, cidadeSelecionada);
+    if (estadoSelecionado !== null && cidadeSelecionada !== null) {
+      onFiltrar(estadoSelecionado, cidadeSelecionada);
+    }
   };
 
   const handleRemoverFiltro = () => {
@@ -91,20 +93,26 @@ const Navbar: React.FC<NavbarProps> = ({ onFiltrar, onRemoverFiltro }) => {
                   </option>
                 ))}
               </select>
-              <button
-                onClick={handleFiltrar}
-                className="bg-green-600 text-white px-4 py-2 rounded-xl ml-2"
-              >
-                Filtrar
-              </button>
-              <button
-                onClick={handleRemoverFiltro}
-                className="bg-red-500 text-white px-4 py-2 rounded-xl ml-2"
-              >
-                Remover Filtro
-              </button>
+              {estadoSelecionado !== null && cidadeSelecionada !== null && (
+                <button
+                  onClick={handleFiltrar}
+                  className="bg-green-600 text-white px-4 py-2 rounded-xl ml-2"
+                >
+                  Filtrar
+                </button>
+              )}
+              {(estadoSelecionado !== null || cidadeSelecionada !== null) && (
+                <button
+                  onClick={handleRemoverFiltro}
+                  className="bg-red-500 text-white px-4 py-2 rounded-xl ml-2"
+                >
+                  Remover Filtro
+                </button>
+              )}
             </div>
-            <span className="text-white">Bem-vindo, {user?.nomeCompleto.split(' ')[0]} !</span>
+            <span className="text-white">
+              Bem-vindo, {user?.nomeCompleto.split(' ')[0]}!
+            </span>
             <button
               onClick={logout}
               className="bg-red-600 text-white px-4 py-2 rounded-xl"
