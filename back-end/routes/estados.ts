@@ -1,5 +1,5 @@
 import express from "express";
-import { getEstados, getCidadesPorEstado } from "../services/apiIBGE";
+import { getEstados, getCidadesPorEstado } from "../src/services/apiIBGE";
 
 const router = express.Router();
 

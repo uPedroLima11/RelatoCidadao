@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import axios from "axios";
 import { PrismaClient } from "@prisma/client";
-
+import { AuthenticatedRequest, verificaToken } from "../middlewares/verificatoken"
 const prisma = new PrismaClient();
 const router = Router();
 
@@ -62,58 +62,35 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  const { titulo, email, descricao, localizacao, foto, estadoId, cidadeId, nome } = req.body;
+router.post("/", verificaToken, async (req: AuthenticatedRequest, res: Response) => {
+  const { titulo, descricao, localizacao, foto, estadoId, cidadeId } = req.body;
 
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  if (!isValidUrl(foto)) {
-    return res.status(400).json({ error: "A URL da foto não é válida." });
+  if (!req.usuario) {
+    return res.status(400).json({ error: "Usuário não autenticado." });
   }
 
   try {
-    const { data: estados } = await axios.get(BASE_URL_ESTADOS);
-    const estadoExistente = estados.find((estado: any) => estado.id === estadoId);
-
-    if (!estadoExistente) {
-      return res.status(404).json({ error: "Estado não encontrado." });
-    }
-
-    const { data: cidades } = await axios.get(`${BASE_URL_ESTADOS}/${estadoId}/municipios`);
-    const cidadeExistente = cidades.find((cidade: any) => cidade.id === cidadeId);
-
-    if (!cidadeExistente) {
-      return res.status(404).json({ error: "Cidade não encontrada no estado selecionado." });
-    }
-
     const novaPostagem = await prisma.postagem.create({
       data: {
         titulo,
-        email,
         descricao,
         localizacao,
         foto,
         estadoId,
         cidadeId,
-        nome,
+        usuarioId: req.usuario.id,
       },
     });
 
     res.status(201).json(novaPostagem);
   } catch (error) {
-    console.error("Erro ao criar postagem:", error instanceof Error ? error.message : error);
+    console.error("Erro ao criar postagem:", error);
     res.status(500).json({ error: "Erro ao criar postagem." });
   }
 });
 
-router.delete("/:id", async (req: Request, res: Response) => {
+
+router.delete("/:id", verificaToken, async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
   try {
     const postagem = await prisma.postagem.delete({
@@ -126,14 +103,14 @@ router.delete("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", verificaToken, async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
-  const { titulo, email, descricao, localizacao, foto } = req.body;
+  const { titulo, descricao, localizacao, foto } = req.body;
 
   try {
     const postagem = await prisma.postagem.update({
       where: { id: Number(id) },
-      data: { titulo, email, descricao, localizacao, foto },
+      data: { titulo, descricao, localizacao, foto },
     });
     res.status(200).json(postagem);
   } catch (error) {
@@ -142,12 +119,16 @@ router.put("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", verificaToken, async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
   try {
     const postagem = await prisma.postagem.findUnique({
       where: { id: Number(id) },
+      include: {
+        usuario: true, 
+      },
     });
+    
     if (!postagem) {
       return res.status(404).json({ error: "Postagem não encontrada." });
     }
@@ -159,11 +140,14 @@ router.get("/:id", async (req: Request, res: Response) => {
       ...postagem,
       estadoNome: estadoNome || "Estado não encontrado",
       cidadeNome: cidadeNome || "Cidade não encontrada",
+      email: postagem.usuario.email, 
+      nome: postagem.usuario.nome,    
     });
   } catch (error) {
     console.error("Erro ao buscar postagem:", error instanceof Error ? error.message : error);
     res.status(500).json({ error: "Erro ao buscar postagem." });
   }
 });
+
 
 export default router;

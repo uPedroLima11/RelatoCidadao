@@ -30,8 +30,8 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
         <h2 className="text-lg font-bold mt-2 text-center">{titulo}</h2>
         <p className="text-black"> {descricao}</p>
         <br />
-        <p className="text-black text-sm mt-1"><span className="font-semibold">Local:</span> {localizacao}</p>
-        <p className="text-black text-sm mt-1"><span className="font-semibold">Nome:</span> {nome}</p>
+        <p className="text-black text-sm mt-1"><span className="font-semibold">Local:</span>  {localizacao}</p>
+        <p className="text-black text-sm mt-1"><span className="font-semibold">Nome:</span>   {nome}</p>
         <p className="text-black text-sm mt-1"><span className="font-semibold">Estado:</span> {estadoNome}</p>
         <p className="text-black text-sm mt-1"><span className="font-semibold">Cidade:</span> {cidadeNome}</p>
       </div>

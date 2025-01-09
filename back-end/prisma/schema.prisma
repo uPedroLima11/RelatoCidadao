@@ -9,6 +9,14 @@ datasource db {
 
 
 
+model Usuario {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  nome     String
+  senha    String
+  postagens Postagem[]
+}
+
 model Postagem {
   id          Int      @id @default(autoincrement())
   titulo      String
@@ -17,10 +25,9 @@ model Postagem {
   foto        String
   estadoId    Int
   cidadeId    Int
-  email       String
-  nome        String
   createdAt   DateTime @default(now())
+  usuarioId   Int
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
 
   @@map("postagens")
 }
-
