@@ -47,8 +47,8 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
           <CardPostagem
             key={postagem.id}
             titulo={postagem.titulo}
-            nome={postagem.nome}
-            descricao={postagem.descricao}
+            descricao={postagem.descricao} 
+            nome={postagem.usuarioNome || "Usuário Anônimo"} 
             localizacao={postagem.localizacao}
             foto={postagem.foto}
             estadoNome={postagem.estadoNome}

@@ -40,6 +40,9 @@ router.get("/", async (req: Request, res: Response) => {
         ...(estadoId ? { estadoId: Number(estadoId) } : {}),
         ...(cidadeId ? { cidadeId: Number(cidadeId) } : {}),
       },
+      include: {
+        usuario: true, 
+      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -51,6 +54,7 @@ router.get("/", async (req: Request, res: Response) => {
           ...postagem,
           estadoNome: estadoNome || "Estado não encontrado",
           cidadeNome: cidadeNome || "Cidade não encontrada",
+          usuarioNome: postagem.usuario.nome, 
         };
       })
     );

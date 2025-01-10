@@ -7,6 +7,7 @@ import { useAuth } from "./components/AuthContext";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import ListaPostagens from "./components/ListarPostagens";
+import { usePathname } from "next/navigation"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,10 @@ export default function RootLayout({
     setCidadeId(null);
   };
 
+  const pathname = usePathname(); 
+
+  const isCreatingPostagem = pathname === '/postagem'; 
+
   return (
     <AuthProvider>
       <html lang="en">
@@ -45,6 +50,7 @@ export default function RootLayout({
             cidadeId={cidadeId}
             onFiltrar={handleFiltrar}
             onRemoverFiltro={handleRemoverFiltro}
+            isCreatingPostagem={isCreatingPostagem} 
           >
             {children}
           </LayoutContent>
@@ -60,20 +66,22 @@ const LayoutContent = ({
   cidadeId,
   onFiltrar,
   onRemoverFiltro,
+  isCreatingPostagem, 
 }: {
   children: React.ReactNode;
   estadoId: number | null;
   cidadeId: number | null;
   onFiltrar: (estadoId: number | null, cidadeId: number | null) => void;
   onRemoverFiltro: () => void;
+  isCreatingPostagem: boolean; 
 }) => {
   const { isAuthenticated } = useAuth();
 
   return (
     <>
       <Navbar onFiltrar={onFiltrar} onRemoverFiltro={onRemoverFiltro} />
-      {isAuthenticated && <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />}
+      {isAuthenticated && !isCreatingPostagem && <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />}
       {children}
     </>
   );
-};
+}

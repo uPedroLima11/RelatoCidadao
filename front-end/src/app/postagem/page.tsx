@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthContext"; // Certifique-se de que o caminho esteja correto
 
 const PostagemForm: React.FC = () => {
+    const { user } = useAuth(); // Obtém o usuário logado do AuthContext
     const [titulo, setTitulo] = useState("");
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
     const [descricao, setDescricao] = useState("");
     const [localizacao, setLocalizacao] = useState("");
     const [foto, setFoto] = useState("");
@@ -82,7 +83,6 @@ const PostagemForm: React.FC = () => {
         const formData = {
             titulo,
             nome,
-            email,
             descricao,
             localizacao,
             foto,
@@ -95,6 +95,8 @@ const PostagemForm: React.FC = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${user?.token}`, 
+                    
                 },
                 body: JSON.stringify(formData),
             });
@@ -104,8 +106,6 @@ const PostagemForm: React.FC = () => {
             if (response.ok) {
                 setSuccessMessage("Postagem criada com sucesso!");
                 setTitulo("");
-                setNome("");
-                setEmail("");
                 setDescricao("");
                 setLocalizacao("");
                 setFoto("");
@@ -120,6 +120,7 @@ const PostagemForm: React.FC = () => {
             setError("Erro ao criar postagem");
         }
     };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-4 text-center">Criar Postagem</h1>
@@ -130,28 +131,6 @@ const PostagemForm: React.FC = () => {
                         type="text"
                         value={titulo}
                         onChange={(e) => setTitulo(e.target.value)}
-                        className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium">Nome:</label>
-                    <input
-                        type="text"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium">Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
                     />
@@ -224,7 +203,6 @@ const PostagemForm: React.FC = () => {
                         ))}
                     </select>
                 </div>
-
 
                 <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
                     Enviar Postagem
