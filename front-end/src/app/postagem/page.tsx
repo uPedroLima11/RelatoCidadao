@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../components/AuthContext"; // Certifique-se de que o caminho esteja correto
+import { useAuth } from "../components/AuthContext"; 
 
 const PostagemForm: React.FC = () => {
-    const { user } = useAuth(); // Obtém o usuário logado do AuthContext
+    const { user } = useAuth(); 
     const [titulo, setTitulo] = useState("");
     const [nome, setNome] = useState("");
     const [descricao, setDescricao] = useState("");
@@ -130,6 +130,7 @@ const PostagemForm: React.FC = () => {
                     <input
                         type="text"
                         value={titulo}
+                        maxLength={100}
                         onChange={(e) => setTitulo(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
@@ -140,6 +141,7 @@ const PostagemForm: React.FC = () => {
                     <label className="block mb-2 text-sm font-medium">Descrição:</label>
                     <textarea
                         value={descricao}
+                        maxLength={1000}
                         onChange={(e) => setDescricao(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         rows={4}
@@ -152,6 +154,7 @@ const PostagemForm: React.FC = () => {
                     <input
                         type="text"
                         value={localizacao}
+                        maxLength={100}
                         onChange={(e) => setLocalizacao(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
@@ -163,6 +166,7 @@ const PostagemForm: React.FC = () => {
                     <input
                         type="text"
                         value={foto}
+                        maxLength={100}
                         onChange={(e) => setFoto(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         required

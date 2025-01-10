@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CardPostagem from "./CardPostagem";
 
+
 interface ListaPostagensProps {
   estadoId: number | null;
   cidadeId: number | null;

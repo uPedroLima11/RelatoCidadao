@@ -7,7 +7,7 @@ import { useAuth } from "./components/AuthContext";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import ListaPostagens from "./components/ListarPostagens";
-import { usePathname } from "next/navigation"; 
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +27,10 @@ export default function RootLayout({
   const [estadoId, setEstadoId] = useState<number | null>(null);
   const [cidadeId, setCidadeId] = useState<number | null>(null);
 
-  const handleFiltrar = (selectedEstadoId: number | null, selectedCidadeId: number | null) => {
+  const handleFiltrar = (
+    selectedEstadoId: number | null,
+    selectedCidadeId: number | null
+  ) => {
     setEstadoId(selectedEstadoId);
     setCidadeId(selectedCidadeId);
   };
@@ -37,20 +40,24 @@ export default function RootLayout({
     setCidadeId(null);
   };
 
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  const isCreatingPostagem = pathname === '/postagem'; 
+  const isCreatingPostagem = pathname === "/postagem";
+  const isMinhasPostagensPage = pathname === "/minhasPostagens";
 
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <LayoutContent
             estadoId={estadoId}
             cidadeId={cidadeId}
             onFiltrar={handleFiltrar}
             onRemoverFiltro={handleRemoverFiltro}
-            isCreatingPostagem={isCreatingPostagem} 
+            isCreatingPostagem={isCreatingPostagem}
+            isMinhasPostagensPage={isMinhasPostagensPage}
           >
             {children}
           </LayoutContent>
@@ -66,22 +73,26 @@ const LayoutContent = ({
   cidadeId,
   onFiltrar,
   onRemoverFiltro,
-  isCreatingPostagem, 
+  isCreatingPostagem,
+  isMinhasPostagensPage,
 }: {
   children: React.ReactNode;
   estadoId: number | null;
   cidadeId: number | null;
   onFiltrar: (estadoId: number | null, cidadeId: number | null) => void;
   onRemoverFiltro: () => void;
-  isCreatingPostagem: boolean; 
+  isCreatingPostagem: boolean;
+  isMinhasPostagensPage: boolean;
 }) => {
   const { isAuthenticated } = useAuth();
 
   return (
     <>
       <Navbar onFiltrar={onFiltrar} onRemoverFiltro={onRemoverFiltro} />
-      {isAuthenticated && !isCreatingPostagem && <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />}
+      {isAuthenticated && !isCreatingPostagem && !isMinhasPostagensPage && (
+        <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />
+      )}
       {children}
     </>
   );
-}
+};

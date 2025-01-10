@@ -13,23 +13,38 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean; 
   login: (email: string, senha: string, continuarConectado: boolean) => Promise<void>;
+  register: (nome: string, email: string, senha: string) => Promise<User>;
   logout: () => void;
+  setToken: (token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true); 
   const router = useRouter();
 
   useEffect(() => {
     const token = Cookies.get("token_usuario_logado");
     const nomeCompleto = Cookies.get("nomeCompleto");
+
     if (token && nomeCompleto) {
       setUser({ nomeCompleto, token });
     }
+
+    setIsLoading(false); 
   }, []);
+
+  const setToken = (token: string) => {
+    if (user) {
+      const updatedUser = { ...user, token };
+      setUser(updatedUser);
+      Cookies.set("token_usuario_logado", token);
+    }
+  };
 
   const login = async (email: string, senha: string, continuarConectado: boolean) => {
     try {
@@ -60,6 +75,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const register = async (nome: string, email: string, senha: string): Promise<User> => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL_API}/usuarios/register`, { nome, email, senha });
+
+      if (response.status === 201) {
+        const { token, usuario } = response.data;
+
+        if (usuario && usuario.nome) {
+          Cookies.set("token_usuario_logado", token);
+          Cookies.set("nomeCompleto", usuario.nome);
+          setUser({ nomeCompleto: usuario.nome, token });
+
+          alert(`Registro feito com sucesso, seja bem-vindo ${usuario.nome}.`);
+          router.push("/logado");
+
+          return { nomeCompleto: usuario.nome, token };
+        } else {
+          alert("Erro: Usuário não retornado na resposta.");
+          throw new Error("Usuário não retornado na resposta.");
+        }
+      } else {
+        alert("Erro ao registrar. Verifique os dados e tente novamente.");
+        throw new Error("Erro ao registrar.");
+      }
+    } catch (error) {
+      console.error("Erro no registro:", error);
+      throw new Error("Erro no registro. Tente novamente mais tarde.");
+    }
+  };
+
   const logout = () => {
     setUser(null);
     Cookies.remove("token_usuario_logado");
@@ -69,7 +114,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        isLoading, 
+        login,
+        register,
+        logout,
+        setToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
