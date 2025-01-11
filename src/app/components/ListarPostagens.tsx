@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import CardPostagem from "./CardPostagem";
-import Image from "next/image";
 interface Postagem {
   id: number;
   titulo: string;
