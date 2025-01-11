@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import { useAuth } from "../components/AuthContext"; 
 
-const RegisterPage: React.FC = () => {
+export default function Registro() {
   const { register, setToken } = useAuth(); 
   const router = useRouter(); 
   const [nome, setNome] = useState("");
@@ -23,8 +23,12 @@ const RegisterPage: React.FC = () => {
       setToken(token);
       setSuccessMessage(`Registro feito com sucesso, seja bem-vindo ${response.nomeCompleto}.`); 
       router.push("/pagina-logada");
-    } catch (error: any) {
-      setErrorMessage("Erro ao cadastrar-se."); 
+    } catch (error: unknown) { 
+      if (error instanceof Error) {
+        setErrorMessage(error.message); 
+      } else {
+        setErrorMessage("Erro ao cadastrar-se."); 
+      }
     }
   };
 
@@ -85,5 +89,3 @@ const RegisterPage: React.FC = () => {
     </div>
   );
 };
-
-export default RegisterPage;

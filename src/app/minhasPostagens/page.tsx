@@ -17,7 +17,8 @@ interface Postagem {
     };
 }
 
-const MinhasPostagens: React.FC = () => {
+export default function MinhasPostagens() {
+
     const { user, isLoading } = useAuth();
     const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [error, setError] = useState<string>("");
@@ -166,7 +167,7 @@ const MinhasPostagens: React.FC = () => {
                                 onChange={(e) =>
                                     setEditingPost({ ...editingPost, titulo: e.target.value })
                                 }
-                                maxLength={100}  
+                                maxLength={100}
                                 className="w-full border px-3 py-2 rounded"
                             />
                         </div>
@@ -177,7 +178,7 @@ const MinhasPostagens: React.FC = () => {
                                 onChange={(e) =>
                                     setEditingPost({ ...editingPost, descricao: e.target.value })
                                 }
-                                maxLength={500}  
+                                maxLength={500}
                                 className="w-full border px-3 py-2 rounded min-h-[150px]"
                             />
                         </div>
@@ -189,7 +190,7 @@ const MinhasPostagens: React.FC = () => {
                                 onChange={(e) =>
                                     setEditingPost({ ...editingPost, localizacao: e.target.value })
                                 }
-                                maxLength={200}  
+                                maxLength={200}
                                 className="w-full border px-3 py-2 rounded"
                             />
                         </div>
@@ -201,7 +202,7 @@ const MinhasPostagens: React.FC = () => {
                                 onChange={(e) =>
                                     setEditingPost({ ...editingPost, foto: e.target.value })
                                 }
-                                maxLength={200}  
+                                maxLength={200}
                                 className="w-full border px-3 py-2 rounded"
                             />
                         </div>
@@ -226,4 +227,3 @@ const MinhasPostagens: React.FC = () => {
     );
 };
 
-export default MinhasPostagens;

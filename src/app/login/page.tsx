@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useAuth } from "../components/AuthContext";
 import { useRouter } from "next/navigation"; 
 
-const LoginPage: React.FC = () => {
+export default function Login() {
   const { login } = useAuth();
   const router = useRouter(); 
   const [email, setEmail] = useState("");
@@ -17,8 +17,12 @@ const LoginPage: React.FC = () => {
     try {
       await login(email, senha, continuarConectado);
       router.push("/pagina-logada"); 
-    } catch (error: any) {
-      setErrorMessage(error.message || "Falha no login. Verifique suas credenciais.");
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "Falha no login. Verifique suas credenciais.");
+      } else {
+        setErrorMessage("Falha no login. Verifique suas credenciais.");
+      }
     }
   };
 
@@ -75,4 +79,3 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;

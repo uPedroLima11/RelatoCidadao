@@ -2,17 +2,10 @@
 
 import React from "react";
 
-interface HomeProps {
-  estadoId: number | null;
-  cidadeId: number | null;
-}
-
-const Home: React.FC<HomeProps> = ({ estadoId, cidadeId }) => {
+export default function Home() {
   return (
     <div>
-      
+      <h1></h1>
     </div>
   );
-};
-
-export default Home;
+}

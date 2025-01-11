@@ -1,4 +1,3 @@
-// GerenciadorDeFiltros.tsx
 import { useState } from "react";
 import ListaPostagens from "./ListarPostagens";
 import Navbar from "./Navbar";

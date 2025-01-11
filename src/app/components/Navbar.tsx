@@ -20,7 +20,7 @@ interface NavbarProps {
   onRemoverFiltro: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onFiltrar, onRemoverFiltro }) => {
+export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
   const { user, isAuthenticated, logout } = useAuth();
   const [estados, setEstados] = useState<Estado[]>([]);
   const [cidades, setCidades] = useState<Cidade[]>([]);
@@ -170,8 +170,6 @@ const Navbar: React.FC<NavbarProps> = ({ onFiltrar, onRemoverFiltro }) => {
         )}
       </div>
     </nav>
-
   );
-};
+}
 
-export default Navbar;

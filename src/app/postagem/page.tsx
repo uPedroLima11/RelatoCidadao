@@ -3,17 +3,26 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/AuthContext"; 
 
-const PostagemForm: React.FC = () => {
+interface Estado {
+    id: number;
+    nome: string;
+}
+
+interface Cidade {
+    id: number;
+    nome: string;
+}
+
+export default function MinhasPostagens() {
     const { user } = useAuth(); 
     const [titulo, setTitulo] = useState("");
-    const [nome, setNome] = useState("");
     const [descricao, setDescricao] = useState("");
     const [localizacao, setLocalizacao] = useState("");
     const [foto, setFoto] = useState("");
     const [estadoId, setEstadoId] = useState<number | "">("");
     const [cidadeId, setCidadeId] = useState<number | "">("");
-    const [estados, setEstados] = useState([]);
-    const [cidades, setCidades] = useState([]);
+    const [estados, setEstados] = useState<Estado[]>([]);
+    const [cidades, setCidades] = useState<Cidade[]>([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [error, setError] = useState("");
 
@@ -82,7 +91,6 @@ const PostagemForm: React.FC = () => {
 
         const formData = {
             titulo,
-            nome,
             descricao,
             localizacao,
             foto,
@@ -96,7 +104,6 @@ const PostagemForm: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${user?.token}`, 
-                    
                 },
                 body: JSON.stringify(formData),
             });
@@ -182,7 +189,7 @@ const PostagemForm: React.FC = () => {
                         required
                     >
                         <option value="">Selecione o Estado</option>
-                        {estados.map((estado: any) => (
+                        {estados.map((estado) => (
                             <option key={estado.id} value={estado.id}>
                                 {estado.nome}
                             </option>
@@ -200,7 +207,7 @@ const PostagemForm: React.FC = () => {
                         disabled={!estadoId}
                     >
                         <option value="">Selecione a Cidade</option>
-                        {cidades.map((cidade: any) => (
+                        {cidades.map((cidade) => (
                             <option key={cidade.id} value={cidade.id}>
                                 {cidade.nome}
                             </option>
@@ -219,4 +226,3 @@ const PostagemForm: React.FC = () => {
     );
 };
 
-export default PostagemForm;
