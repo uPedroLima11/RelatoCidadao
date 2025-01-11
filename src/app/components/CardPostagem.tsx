@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 interface CardPostagemProps {
   titulo: string;
@@ -21,7 +22,7 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
 }) => {
   return (
     <div className="mt-10 bg-[#f8f6fa] border-gray-500 border-[0.1rem] shadow-md rounded-lg max-w-sm md:max-w-md mx-auto mb-6">
-      <img
+      <Image
         src={foto}
         alt="Imagem do problema"
         className="w-full h-48 object-cover rounded-t-lg"

@@ -3,6 +3,16 @@
 import React, { useEffect, useState } from "react";
 import CardPostagem from "./CardPostagem";
 
+interface Postagem {
+  id: number;
+  titulo: string;
+  descricao: string;
+  usuarioNome?: string; 
+  localizacao: string;
+  foto: string;
+  estadoNome: string;
+  cidadeNome: string;
+}
 
 interface ListaPostagensProps {
   estadoId: number | null;
@@ -10,7 +20,7 @@ interface ListaPostagensProps {
 }
 
 const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) => {
-  const [postagens, setPostagens] = useState<any[]>([]);
+  const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -48,8 +58,8 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
           <CardPostagem
             key={postagem.id}
             titulo={postagem.titulo}
-            descricao={postagem.descricao} 
-            nome={postagem.usuarioNome || "Usuário Anônimo"} 
+            descricao={postagem.descricao}
+            nome={postagem.usuarioNome || "Usuário Anônimo"}
             localizacao={postagem.localizacao}
             foto={postagem.foto}
             estadoNome={postagem.estadoNome}
