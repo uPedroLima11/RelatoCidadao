@@ -25,8 +25,9 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
       <Image
         src={foto}
         alt="Imagem do problema"
-        width={400} 
-        height={240} 
+        width={500} 
+        height={300}
+        quality={100} 
         className="w-full h-48 object-cover rounded-t-lg"
       />
       <div className="p-4">
