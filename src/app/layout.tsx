@@ -44,6 +44,7 @@ export default function RootLayout({
 
   const isCreatingPostagem = pathname === "/postagem";
   const isMinhasPostagensPage = pathname === "/minhasPostagens";
+  const isPostagemDetailPage = pathname.startsWith("/postagens/");
 
   return (
     <AuthProvider>
@@ -58,6 +59,7 @@ export default function RootLayout({
             onRemoverFiltro={handleRemoverFiltro}
             isCreatingPostagem={isCreatingPostagem}
             isMinhasPostagensPage={isMinhasPostagensPage}
+            isPostagemDetailPage={isPostagemDetailPage}
           >
             {children}
           </LayoutContent>
@@ -67,15 +69,7 @@ export default function RootLayout({
   );
 }
 
-const LayoutContent = ({
-  children,
-  estadoId,
-  cidadeId,
-  onFiltrar,
-  onRemoverFiltro,
-  isCreatingPostagem,
-  isMinhasPostagensPage,
-}: {
+const LayoutContent = (props: {
   children: React.ReactNode;
   estadoId: number | null;
   cidadeId: number | null;
@@ -83,13 +77,15 @@ const LayoutContent = ({
   onRemoverFiltro: () => void;
   isCreatingPostagem: boolean;
   isMinhasPostagensPage: boolean;
+  isPostagemDetailPage: boolean;
 }) => {
   const { isAuthenticated } = useAuth();
+  const { children, estadoId, cidadeId, onFiltrar, onRemoverFiltro, isCreatingPostagem, isMinhasPostagensPage, isPostagemDetailPage } = props;
 
   return (
     <>
       <Navbar onFiltrar={onFiltrar} onRemoverFiltro={onRemoverFiltro} />
-      {isAuthenticated && !isCreatingPostagem && !isMinhasPostagensPage && (
+      {isAuthenticated && !isCreatingPostagem && !isMinhasPostagensPage && !isPostagemDetailPage && (
         <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />
       )}
       {children}

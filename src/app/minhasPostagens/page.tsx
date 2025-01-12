@@ -18,7 +18,6 @@ interface Postagem {
 }
 
 export default function MinhasPostagens() {
-
     const { user, isLoading } = useAuth();
     const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [error, setError] = useState<string>("");
@@ -136,6 +135,7 @@ export default function MinhasPostagens() {
                     <div key={postagem.id} className="mb-4">
                         <CardPostagem
                             titulo={postagem.titulo}
+                            id={postagem.id} 
                             nome={postagem.usuario.nome}
                             descricao={postagem.descricao}
                             localizacao={postagem.localizacao}
@@ -143,11 +143,17 @@ export default function MinhasPostagens() {
                             estadoNome={postagem.estadoNome}
                             cidadeNome={postagem.cidadeNome}
                         />
-                        <div className="flex justify-between mt-2">
-                            <button className="bg-[#253746] rounded-xl p-2 text-white" onClick={() => handleEdit(postagem)}>
+                        <div className="mt-2 flex justify-center space-x-4">
+                            <button
+                                className="bg-[#253746] rounded-xl p-2 text-white"
+                                onClick={() => handleEdit(postagem)}
+                            >
                                 Editar
                             </button>
-                            <button className="bg-[#a53425] rounded-xl p-2 text-white" onClick={() => handleDelete(postagem.id)}>
+                            <button
+                                className="bg-[#a53425] rounded-xl p-2 text-white"
+                                onClick={() => handleDelete(postagem.id)}
+                            >
                                 Remover
                             </button>
                         </div>
@@ -157,7 +163,7 @@ export default function MinhasPostagens() {
 
             {editingPost && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-10 rounded-lg shadow-lg">
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl"> 
                         <h2 className="text-2xl font-bold mb-4">Editar Postagem</h2>
                         <div className="mb-4">
                             <label className="block mb-2">Título:</label>
@@ -179,7 +185,7 @@ export default function MinhasPostagens() {
                                     setEditingPost({ ...editingPost, descricao: e.target.value })
                                 }
                                 maxLength={500}
-                                className="w-full border px-3 py-2 rounded min-h-[150px]"
+                                className="w-full border px-3 py-2 rounded min-h-[150px] h-40" //
                             />
                         </div>
                         <div className="mb-4">
@@ -226,4 +232,3 @@ export default function MinhasPostagens() {
         </div>
     );
 };
-
