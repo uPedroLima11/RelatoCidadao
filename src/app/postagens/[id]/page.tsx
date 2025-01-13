@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { useAuth } from "../../components/AuthContext"; 
+import { useAuth } from "../../components/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,8 +24,8 @@ interface Postagem {
 }
 
 const PostagemPage: React.FC = () => {
-    const { id } = useParams(); 
-    const { user } = useAuth(); 
+    const { id } = useParams();
+    const { user } = useAuth();
     const [postagem, setPostagem] = useState<Postagem | null>(null);
     const [comentarios, setComentarios] = useState<Comentario[]>([]);
     const [novoComentario, setNovoComentario] = useState("");
@@ -72,7 +71,12 @@ const PostagemPage: React.FC = () => {
     const handleAdicionarComentario = async () => {
         if (!novoComentario.trim()) return;
 
-        const token = user?.token; 
+        if (novoComentario.length > 300) {
+            setError("O comentário não pode exceder 300 caracteres.");
+            return;
+        }
+
+        const token = user?.token;
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/comentarios`, {
@@ -159,15 +163,17 @@ const PostagemPage: React.FC = () => {
                 <h2 className="text-xl font-bold mb-4">Comentários</h2>
                 <ul className="mb-4">
                     {comentarios.map((comentario) => (
-                        <li key={comentario.id} className="mb-2 flex items-center justify-between">
-                            <p className="text-gray-700">
-                                <strong>{comentario.usuarioNome}:</strong> {comentario.conteudo}
-                            </p>
-                            {comentario.usuarioNome === user?.nomeCompleto && (
-                                <button onClick={() => handleExcluirComentario(comentario.id)} className="text-red-500">
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            )}
+                        <li key={comentario.id} className="mb-2">
+                            <div className="flex items-center justify-between">
+                                <p className="text-gray-700">
+                                    <strong>{comentario.usuarioNome}:</strong> {comentario.conteudo}
+                                </p>
+                                {comentario.usuarioNome === user?.nomeCompleto && (
+                                    <button onClick={() => handleExcluirComentario(comentario.id)} className="text-red-500">
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                )}
+                            </div>
                         </li>
                     ))}
                 </ul>

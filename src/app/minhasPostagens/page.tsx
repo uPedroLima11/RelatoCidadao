@@ -131,39 +131,109 @@ export default function MinhasPostagens() {
             {postagens.length === 0 ? (
                 <p className="text-center">Você ainda não fez nenhuma postagem.</p>
             ) : (
-                postagens.map((postagem) => (
-                    <div key={postagem.id} className="mb-4">
-                        <CardPostagem
-                            titulo={postagem.titulo}
-                            id={postagem.id} 
-                            nome={postagem.usuario.nome}
-                            descricao={postagem.descricao}
-                            localizacao={postagem.localizacao}
-                            foto={postagem.foto}
-                            estadoNome={postagem.estadoNome}
-                            cidadeNome={postagem.cidadeNome}
-                        />
-                        <div className="mt-2 flex justify-center space-x-4">
-                            <button
-                                className="bg-[#253746] rounded-xl p-2 text-white"
-                                onClick={() => handleEdit(postagem)}
-                            >
-                                Editar
-                            </button>
-                            <button
-                                className="bg-[#a53425] rounded-xl p-2 text-white"
-                                onClick={() => handleDelete(postagem.id)}
-                            >
-                                Remover
-                            </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {postagens.map((postagem) => (
+                        <div key={postagem.id} className="mb-4">
+                            <CardPostagem
+                                titulo={postagem.titulo}
+                                id={postagem.id}
+                                nome={postagem.usuario.nome}
+                                descricao={postagem.descricao}
+                                localizacao={postagem.localizacao}
+                                foto={postagem.foto}
+                                estadoNome={postagem.estadoNome}
+                                cidadeNome={postagem.cidadeNome}
+                            />
+                            <div className="mt-2 flex justify-center space-x-4">
+                                <button
+                                    className="bg-[#253746] rounded-xl p-2 text-white"
+                                    onClick={() => handleEdit(postagem)}
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    className="bg-[#a53425] rounded-xl p-2 text-white"
+                                    onClick={() => handleDelete(postagem.id)}
+                                >
+                                    Remover
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))
+                    ))}
+                </div>
             )}
 
             {editingPost && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl"> 
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+                        <h2 className="text-2xl font-bold mb-4">Editar Postagem</h2>
+                        <div className="mb-4">
+                            <label className="block mb-2">Título:</label>
+                            <input
+                                type="text"
+                                value={editingPost.titulo}
+                                onChange={(e) =>
+                                    setEditingPost({ ...editingPost, titulo: e.target.value })
+                                }
+                                maxLength={100}
+                                className="w-full border px-3 py-2 rounded"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-2">Descrição:</label>
+                            <textarea
+                                value={editingPost.descricao}
+                                onChange={(e) =>
+                                    setEditingPost({ ...editingPost, descricao: e.target.value })
+                                }
+                                maxLength={500}
+                                className="w-full border px-3 py-2 rounded min-h-[150px] h-40"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-2">Localização:</label>
+                            <input
+                                type="text"
+                                value={editingPost.localizacao}
+                                onChange={(e) =>
+                                    setEditingPost({ ...editingPost, localizacao: e.target.value })
+                                }
+                                maxLength={200}
+                                className="w-full border px-3 py-2 rounded"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-2">Foto URL:</label>
+                            <input
+                                type="URL"
+                                value={editingPost.foto}
+                                onChange={(e) =>
+                                    setEditingPost({ ...editingPost, foto: e.target.value })
+                                }
+                                maxLength={200}
+                                className="w-full border px-3 py-2 rounded"
+                            />
+                        </div>
+                        <div className="flex justify-end">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                                onClick={handleSave}
+                            >
+                                Salvar
+                            </button>
+                            <button
+                                className="bg-gray-500 text-white px-4 py-2 rounded"
+                                onClick={() => setEditingPost(null)}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {editingPost && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
                         <h2 className="text-2xl font-bold mb-4">Editar Postagem</h2>
                         <div className="mb-4">
                             <label className="block mb-2">Título:</label>
