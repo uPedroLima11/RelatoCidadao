@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation"; 
-import { useAuth } from "./components/AuthContext"; 
+import { useRouter } from "next/navigation";
+import { useAuth } from "./components/AuthContext";
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -15,6 +15,7 @@ export default function Home() {
       router.push("/pagina-logada");
     }
   }, [isAuthenticated, router]);
+
   return (
     <div>
       <div className="relative flex items-center justify-center h-[60vh]">
@@ -87,19 +88,19 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="p-6 bg-gray-100 rounded-lg shadow">
               <p className="text-gray-700 italic mb-4">
-                "Relatei um buraco enorme na minha rua e em menos de uma semana já estava resolvido!"
+                &quot;Relatei um buraco enorme na minha rua e em menos de uma semana já estava resolvido!&quot;
               </p>
               <h4 className="font-semibold text-lg">Maria Silva</h4>
             </div>
             <div className="p-6 bg-gray-100 rounded-lg shadow">
               <p className="text-gray-700 italic mb-4">
-                "Muito fácil de usar! Recomendo a todos que queiram ajudar suas comunidades."
+                &quot;Muito fácil de usar! Recomendo a todos que queiram ajudar suas comunidades.&quot;
               </p>
               <h4 className="font-semibold text-lg">João Pereira</h4>
             </div>
             <div className="p-6 bg-gray-100 rounded-lg shadow">
               <p className="text-gray-700 italic mb-4">
-                "A plataforma é incrível e realmente faz a diferença!"
+                &quot;A plataforma é incrível e realmente faz a diferença!&quot;
               </p>
               <h4 className="font-semibold text-lg">Ana Souza</h4>
             </div>
