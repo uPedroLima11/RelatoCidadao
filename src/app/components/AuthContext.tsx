@@ -13,18 +13,19 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  isLoading: boolean; 
+  isLoading: boolean;
   login: (email: string, senha: string, continuarConectado: boolean) => Promise<void>;
   register: (nome: string, email: string, senha: string) => Promise<User>;
   logout: () => void;
   setToken: (token: string) => void;
+  refreshToken: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser({ nomeCompleto, token });
     }
 
-    setIsLoading(false); 
+    setIsLoading(false);
   }, []);
 
   const setToken = (token: string) => {
@@ -43,6 +44,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const updatedUser = { ...user, token };
       setUser(updatedUser);
       Cookies.set("token_usuario_logado", token);
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL_API}/auth/refresh`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+
+      const { token } = response.data;
+      if (token) {
+        setToken(token);
+      } else {
+        throw new Error("Erro ao renovar o token");
+      }
+    } catch (error) {
+      console.error("Erro ao renovar o token:", error);
+      logout();
     }
   };
 
@@ -118,11 +139,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         isAuthenticated: !!user,
-        isLoading, 
+        isLoading,
         login,
         register,
         logout,
         setToken,
+        refreshToken,
       }}
     >
       {children}
