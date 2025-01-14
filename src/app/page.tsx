@@ -134,9 +134,9 @@ export default function Home() {
           Junte-se a nós e transforme sua cidade. Sua voz importa!
         </p>
         <Link href="/registro">
-          <p className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg text-lg">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg text-lg">
             Comece Agora
-          </p>
+          </button>
         </Link>
       </div>
     </div>
