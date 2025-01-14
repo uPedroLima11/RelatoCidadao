@@ -43,9 +43,9 @@ export default function RootLayout({
 
   const pathname = usePathname();
 
-  const isCreatingPostagem = pathname === "/postagem";
-  const isMinhasPostagensPage = pathname === "/minhasPostagens";
-  const isPostagemDetailPage = pathname.startsWith("/postagens/");
+  const criarPostagem = pathname === "/postagem";
+  const minhasPostagensPage = pathname === "/minhasPostagens";
+  const postagemDetalhePage = pathname.startsWith("/postagens/");
 
   return (
     <AuthProvider>
@@ -58,9 +58,9 @@ export default function RootLayout({
             cidadeId={cidadeId}
             onFiltrar={handleFiltrar}
             onRemoverFiltro={handleRemoverFiltro}
-            isCreatingPostagem={isCreatingPostagem}
-            isMinhasPostagensPage={isMinhasPostagensPage}
-            isPostagemDetailPage={isPostagemDetailPage}
+            criarPostagem={criarPostagem}
+            minhasPostagensPage={minhasPostagensPage}
+            postagemDetalhePage={postagemDetalhePage}
           >
             {children}
           </LayoutContent>
@@ -76,17 +76,17 @@ const LayoutContent = (props: {
   cidadeId: number | null;
   onFiltrar: (estadoId: number | null, cidadeId: number | null) => void;
   onRemoverFiltro: () => void;
-  isCreatingPostagem: boolean;
-  isMinhasPostagensPage: boolean;
-  isPostagemDetailPage: boolean;
+  criarPostagem: boolean;
+  minhasPostagensPage: boolean;
+  postagemDetalhePage: boolean;
 }) => {
   const { isAuthenticated } = useAuth();
-  const { children, estadoId, cidadeId, onFiltrar, onRemoverFiltro, isCreatingPostagem, isMinhasPostagensPage, isPostagemDetailPage } = props;
+  const { children, estadoId, cidadeId, onFiltrar, onRemoverFiltro, criarPostagem, minhasPostagensPage, postagemDetalhePage } = props;
 
   return (
     <>
       <Navbar onFiltrar={onFiltrar} onRemoverFiltro={onRemoverFiltro} />
-      {isAuthenticated && !isCreatingPostagem && !isMinhasPostagensPage && !isPostagemDetailPage && (
+      {isAuthenticated && !criarPostagem && !minhasPostagensPage && !postagemDetalhePage && (
         <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />
       )}
       {children}
