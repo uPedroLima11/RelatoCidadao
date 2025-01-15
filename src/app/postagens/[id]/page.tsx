@@ -43,7 +43,7 @@ const PostagemPage: React.FC = () => {
                 } else {
                     throw new Error("Erro ao buscar a postagem.");
                 }
-            } catch (error) {  // Mudança aqui
+            } catch (error) {
                 console.error("Erro ao carregar a postagem:", error);
                 setError("Erro ao carregar a postagem.");
             }
@@ -58,8 +58,8 @@ const PostagemPage: React.FC = () => {
                 } else {
                     throw new Error("Erro ao buscar os comentários.");
                 }
-            } catch (error) {  // Mudança aqui
-                console.error(error);
+            } catch (error) {
+                console.error("Erro ao carregar os comentários:", error);
                 setError("Erro ao carregar os comentários.");
             }
         };
@@ -95,8 +95,8 @@ const PostagemPage: React.FC = () => {
                 const errorData = await response.json();
                 throw new Error(`Erro ao adicionar o comentário: ${errorData.error}`);
             }
-        } catch (error) {  // Mudança aqui
-            console.error(error);
+        } catch (error) {
+            console.error("Erro ao adicionar o comentário:", error);
             setError("Erro ao adicionar o comentário.");
         }
     };
@@ -119,8 +119,8 @@ const PostagemPage: React.FC = () => {
                 const errorData = await response.json();
                 throw new Error(`Erro ao excluir o comentário: ${errorData.error}`);
             }
-        } catch (error) {  // Mudança aqui
-            console.error(error);
+        } catch (error) {
+            console.error("Erro ao excluir o comentário:", error);
             setError("Erro ao excluir o comentário.");
         }
     };
@@ -139,7 +139,7 @@ const PostagemPage: React.FC = () => {
 
     try {
         new URL(fotoUrl);
-    } catch (e) {
+    } catch (error) {
         console.error("URL da imagem inválida:", fotoUrl);
     }
 
