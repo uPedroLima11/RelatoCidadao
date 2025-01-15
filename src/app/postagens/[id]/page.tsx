@@ -43,11 +43,12 @@ const PostagemPage: React.FC = () => {
                 } else {
                     throw new Error("Erro ao buscar a postagem.");
                 }
-            } catch (err) {
-                console.error(err);
+            } catch (e) {
+                console.error("Erro ao carregar a postagem:", e);
                 setError("Erro ao carregar a postagem.");
             }
         };
+
 
         const fetchComentarios = async () => {
             try {
