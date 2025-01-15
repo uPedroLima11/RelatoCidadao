@@ -133,7 +133,15 @@ const PostagemPage: React.FC = () => {
         return <div>Carregando... <div className="mt-[40rem]"></div></div>;
     }
 
-    const fotoUrl = postagem.foto ? `${process.env.NEXT_PUBLIC_URL_API}${postagem.foto}` : '/default-image.jpg';
+    const fotoUrl = postagem.foto && postagem.foto.startsWith('http')
+        ? postagem.foto
+        : `${process.env.NEXT_PUBLIC_URL_API}${postagem.foto || '/default-image.jpg'}`;
+
+    try {
+        new URL(fotoUrl);
+    } catch (e) {
+        console.error("URL da imagem inválida:", fotoUrl);
+    }
 
     return (
         <div className="container mx-auto p-4">

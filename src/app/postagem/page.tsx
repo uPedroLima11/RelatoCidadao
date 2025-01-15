@@ -34,8 +34,7 @@ export default function MinhasPostagens() {
                     const data = await response.json();
                     setEstados(data);
                 } else {
-                    console.error("Erro ao buscar estados.");
-                    setError("Erro ao carregar estados");
+                    throw new Error("Erro ao buscar estados.");
                 }
             } catch (error) {
                 console.error("Erro ao conectar-se à API:", error);
@@ -56,8 +55,7 @@ export default function MinhasPostagens() {
                     if (response.ok) {
                         setCidades(await response.json());
                     } else {
-                        console.error("Erro ao buscar cidades.");
-                        setError("Erro ao carregar cidades");
+                        throw new Error("Erro ao buscar cidades.");
                     }
                 } catch (error) {
                     console.error("Erro ao conectar-se à API:", error);
@@ -73,16 +71,31 @@ export default function MinhasPostagens() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         formData.append("titulo", titulo);
         formData.append("descricao", descricao);
         formData.append("localizacao", localizacao);
+    
         if (foto) {
             formData.append("foto", foto);
+        } else {
+            console.error("Erro: foto não está definida.");
+            setError("A imagem é obrigatória.");
+            return;
         }
-        formData.append("estadoId", String(estadoId));
-        formData.append("cidadeId", String(cidadeId));
+        if (estadoId !== "") {
+            formData.append("estadoId", String(estadoId));
+        } else {
+            setError("Estado é obrigatório.");
+            return;
+        }
+        if (cidadeId !== "") {
+            formData.append("cidadeId", String(cidadeId));
+        } else {
+            setError("Cidade é obrigatória.");
+            return;
+        }
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens`, {
@@ -94,11 +107,11 @@ export default function MinhasPostagens() {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Erro do servidor:", errorData.error);
-                setError(errorData.error || "Erro ao criar postagem");
+                const errorText = await response.text();
+                console.error("Erro do servidor:", errorText);
+                setError("Erro ao criar postagem");
                 return;
-            }
+            } 
 
             setSuccessMessage("Postagem criada com sucesso!");
             setTitulo("");
@@ -107,6 +120,8 @@ export default function MinhasPostagens() {
             setFoto(null);
             setEstadoId("");
             setCidadeId("");
+            setCidades([]);
+            setError(""); // Limpa a mensagem de erro
         } catch (error) {
             console.error("Erro ao criar postagem:", error);
             setError("Erro ao criar postagem");
@@ -157,10 +172,13 @@ export default function MinhasPostagens() {
                     <label className="block mb-2 text-sm font-medium">Foto:</label>
                     <input
                         type="file"
+                        name="foto"
                         onChange={(e) => setFoto(e.target.files?.[0] || null)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                        accept="image/*"
                         required
                     />
+
                 </div>
 
                 <div className="mb-4">

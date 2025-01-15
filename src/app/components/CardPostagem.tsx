@@ -23,7 +23,8 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
   estadoNome,
   cidadeNome,
 }) => {
-  const fotoUrl = foto ? `${process.env.NEXT_PUBLIC_URL_API}${foto}` : '/default-image.jpg';
+  const fotoUrl = foto ? new URL(foto, process.env.NEXT_PUBLIC_URL_API).href : '/default-image.jpg';
+  console.log("fotoUrl:", fotoUrl); 
 
   return (
     <div className="mt-10 bg-[#f8f6fa] border-gray-500 border-[0.1rem] shadow-md rounded-lg max-w-sm md:max-w-md mx-auto mb-6">
