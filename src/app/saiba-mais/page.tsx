@@ -90,7 +90,7 @@ export default function SaibaMais() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Acompanhe</h3>
               <p className="text-gray-600">
-                Veja o status da sua solicitação e interaja com outros
+                Veja o status da sua solicitação e interaja com a postagem de outros
                 usuários.
               </p>
             </div>
