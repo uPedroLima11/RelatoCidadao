@@ -60,6 +60,7 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
           </Link>
         </div>
       </div>
+      
     </div>
   );
 };
