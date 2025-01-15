@@ -78,7 +78,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
   <div className="container mx-auto flex justify-between items-center">
     <div className="flex flex-col items-center space-x-2">
       <Image
-        src="/logo.png"
+        src="/logo2.png"
         alt="logo"
         width={50}
         height={50}
