@@ -7,7 +7,9 @@ interface Postagem {
   id: number;
   titulo: string;
   descricao: string;
-  usuarioNome?: string;
+  usuario: {
+    nome: string;
+  };
   localizacao: string;
   foto: string;
   estadoNome: string;
@@ -35,12 +37,14 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
           throw new Error("Erro ao buscar postagens.");
         }
         const data: Postagem[] = await response.json();
+        console.log("Postagens retornadas:", data);
         setPostagens(data);
       } catch (err) {
         console.error(err);
         setError("Erro ao carregar postagens.");
       }
     };
+
 
     fetchPostagens();
   }, [estadoId, cidadeId]);
@@ -60,18 +64,20 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
               id={postagem.id}
               titulo={postagem.titulo}
               descricao={postagem.descricao}
-              nome={postagem.usuarioNome || "Usuário Anônimo"}
+              nome={postagem.usuario?.nome} 
               localizacao={postagem.localizacao}
               foto={postagem.foto}
               estadoNome={postagem.estadoNome}
               cidadeNome={postagem.cidadeNome}
             />
           ))}
+
+
         </div>
       ) : (
         <div>
-        <p className="text-center">Nenhuma postagem encontrada.</p>
-        <div className="mt-[52rem]"></div></div>
+          <p className="text-center">Nenhuma postagem encontrada.</p>
+          <div className="mt-[52rem]"></div></div>
       )}
     </div>
   );
