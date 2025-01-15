@@ -35,21 +35,21 @@ export default function SaibaMais() {
             funcional.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:scale-110 transition delay-150 duration-300 ease-in-out">
               <h3 className="text-xl font-semibold mb-4">Apoio à Comunidade</h3>
               <p className="text-gray-600">
                 Facilitamos o diálogo entre moradores e prefeituras para atender
                 demandas locais com mais agilidade.
               </p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:scale-110 transition delay-150 duration-300 ease-in-out">
               <h3 className="text-xl font-semibold mb-4">Transparência</h3>
               <p className="text-gray-600">
                 Todas as postagens são públicas, promovendo responsabilidade e
                 engajamento.
               </p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:scale-110 transition delay-150 duration-300 ease-in-out">
               <h3 className="text-xl font-semibold mb-4">Facilidade de Uso</h3>
               <p className="text-gray-600">
                 Com poucos cliques, você pode registrar um problema e acompanhar

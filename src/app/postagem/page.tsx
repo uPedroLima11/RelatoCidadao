@@ -222,6 +222,7 @@ export default function MinhasPostagens() {
 
             {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
             {error && <div className="text-red-500 mt-4">{error}</div>}
+           
         </div>
     );
 };

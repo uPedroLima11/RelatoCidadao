@@ -130,7 +130,7 @@ const PostagemPage: React.FC = () => {
     }
 
     if (!postagem) {
-        return <div>Carregando...</div>;
+        return <div>Carregando... <div className="mt-[40rem]"></div></div>;
     }
 
     return (

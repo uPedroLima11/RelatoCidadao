@@ -35,7 +35,7 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
       />
       <div className="p-4">
         <h2 className="text-lg font-bold mt-2 text-center">{titulo}</h2>
-        <p className="text-black font-normal mb-2" style={{ maxHeight: '100px', overflowY: 'auto' }}>
+        <p className="text-black font-normal mb-4" style={{ maxHeight: '140px', overflowY: 'auto' }}>
           {descricao}
         </p>
         <p className="text-black text-sm mt-1">

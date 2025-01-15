@@ -82,51 +82,54 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="py-16 bg-white ">
+        <div className="max-w-5xl mx-auto text-center ">
           <h2 className="text-3xl font-bold mb-8">O Que Nossos Usuários Dizem</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-6 bg-gray-100 rounded-lg shadow">
+            <div className="p-6 hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-100 rounded-lg shadow-lg">
               <p className="text-gray-700 italic mb-4">
-                &quot;Relatei um buraco enorme na minha rua e em menos de uma semana já estava resolvido!&quot;
+                &quot;Relatei um buraco enorme na minha rua e em menos de uma semana já estava resolvido!&quot; 
               </p>
               <h4 className="font-semibold text-lg">Maria Silva</h4>
             </div>
-            <div className="p-6 bg-gray-100 rounded-lg shadow">
+            <div className="p-6 hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-100 rounded-lg shadow-lg">
               <p className="text-gray-700 italic mb-4">
                 &quot;Muito fácil de usar! Recomendo a todos que queiram ajudar suas comunidades.&quot;
               </p>
               <h4 className="font-semibold text-lg">João Pereira</h4>
             </div>
-            <div className="p-6 bg-gray-100 rounded-lg shadow">
+            <div className="p-6 hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-100 rounded-lg shadow-lg">
               <p className="text-gray-700 italic mb-4">
-                &quot;A plataforma é incrível e realmente faz a diferença!&quot;
+                &quot;A plataforma é incrível e realmente faz a diferença! &quot;  
               </p>
-              <h4 className="font-semibold text-lg">Ana Souza</h4>
+              <h4 className="font-semibold text-lg mt-9">Ana Souza</h4>
             </div>
           </div>
         </div>
       </div>
 
+
+
       <div className="py-16 bg-blue-500 text-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">Nosso Impacto</h2>
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-8">Por que usar o Relato Cidadão?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-4xl font-bold">1.245</h3>
-              <p className="mt-2">Problemas Resolvidos</p>
+              <h3 className="text-2xl font-bold">📸 Adicione Fotos</h3>
+              <p className="mt-2">Registre imagens dos problemas para maior clareza.</p>
             </div>
             <div>
-              <h3 className="text-4xl font-bold">4.678</h3>
-              <p className="mt-2">Postagens Criadas</p>
+              <h3 className="text-2xl font-bold">📍 Diga sua Localização</h3>
+              <p className="mt-2">Marque exatamente onde o problema está.</p>
             </div>
             <div>
-              <h3 className="text-4xl font-bold">3.234</h3>
-              <p className="mt-2">Usuários Registrados</p>
+              <h3 className="text-2xl font-bold">🌟 Contribua para a mudança</h3>
+              <p className="mt-2">Seja parte do impacto positivo ao relatar e solucionar problemas na sua comunidade.</p>
             </div>
           </div>
         </div>
       </div>
+
 
       <div className="py-16 bg-gray-800 text-white text-center">
         <h2 className="text-3xl font-bold mb-4">Pronto para Fazer a Diferença?</h2>
