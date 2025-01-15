@@ -8,7 +8,7 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import ListaPostagens from "./components/ListarPostagens";
 import { usePathname } from "next/navigation";
-import Footer from "./components/Footer";
+import Footer from "./components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
