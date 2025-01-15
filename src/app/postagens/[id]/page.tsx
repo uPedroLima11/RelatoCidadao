@@ -130,7 +130,7 @@ const PostagemPage: React.FC = () => {
     }
 
     if (!postagem) {
-        return <div>Carregando... <div className="mt-[40rem]"></div></div>;
+        return <div>Carregando... <div className="mt-[50rem]"></div></div>;
     }
 
     const fotoUrl = postagem.foto && postagem.foto.startsWith('http')

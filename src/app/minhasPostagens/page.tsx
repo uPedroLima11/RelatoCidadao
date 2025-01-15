@@ -139,7 +139,8 @@ export default function MinhasPostagens() {
       <h1 className="text-3xl font-bold mb-4 text-center">Minhas Postagens</h1>
       {error && <div className="text-red-500 mt-4">{error}</div>}
       {postagens.length === 0 ? (
-        <p className="text-center">Você ainda não fez nenhuma postagem.</p>
+        <div> <p className="text-center">Você ainda não fez nenhuma postagem.</p>
+        <div className="mt-[50rem]"></div></div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {postagens.map((postagem) => (
