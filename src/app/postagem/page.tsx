@@ -80,23 +80,24 @@ export default function MinhasPostagens() {
         if (foto) {
             formData.append("foto", foto);
         } else {
-            console.error("Erro: foto não está definida.");
             setError("A imagem é obrigatória.");
             return;
         }
+    
         if (estadoId !== "") {
             formData.append("estadoId", String(estadoId));
         } else {
             setError("Estado é obrigatório.");
             return;
         }
+    
         if (cidadeId !== "") {
             formData.append("cidadeId", String(cidadeId));
         } else {
             setError("Cidade é obrigatória.");
             return;
         }
-
+    
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens`, {
                 method: "POST",
@@ -105,14 +106,14 @@ export default function MinhasPostagens() {
                 },
                 body: formData,
             });
-
+    
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("Erro do servidor:", errorText);
                 setError("Erro ao criar postagem");
                 return;
-            } 
-
+            }
+    
             setSuccessMessage("Postagem criada com sucesso!");
             setTitulo("");
             setDescricao("");
@@ -121,13 +122,13 @@ export default function MinhasPostagens() {
             setEstadoId("");
             setCidadeId("");
             setCidades([]);
-            setError(""); // Limpa a mensagem de erro
+            setError("");
         } catch (error) {
             console.error("Erro ao criar postagem:", error);
             setError("Erro ao criar postagem");
         }
     };
-
+    
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-4 text-center">Criar Postagem</h1>
