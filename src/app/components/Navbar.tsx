@@ -129,11 +129,11 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                 ))}
               </select>
             </div>
-            <div className="flex space-x-4 mt-1 lg:mt-0 ml-4">
+            <div className="flex sm:space-x-4 mt-1 lg:mt-0 ml-4">
               {estadoSelecionado !== null && cidadeSelecionada !== null && (
                 <button
                   onClick={handleFiltrar}
-                  className="bg-green-700 text-white px-4 py-2 rounded text-base sm:text-sm"
+                  className="bg-green-700  -ml-2 mr-2 sm:-ml-0 sm:mr-0 text-white px-2 sm:px-4 sm:py-3 py-2 rounded text-base sm:text-sm"
                 >
                   Filtrar
                 </button>
@@ -141,7 +141,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
               {(estadoSelecionado !== null || cidadeSelecionada !== null) && (
                 <button
                   onClick={handleRemoverFiltro}
-                  className="bg-red-400 text-white px-4 py-2 rounded text-base sm:text-sm"
+                  className="bg-red-400 text-white px-2 sm:px-4 sm:py-3 py-2 rounded text-base sm:text-sm"
                 >
                   Remover Filtro
                 </button>
