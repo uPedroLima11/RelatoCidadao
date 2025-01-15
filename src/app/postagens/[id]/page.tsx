@@ -43,8 +43,8 @@ const PostagemPage: React.FC = () => {
                 } else {
                     throw new Error("Erro ao buscar a postagem.");
                 }
-            } catch (error) {
-                console.error("Erro ao carregar a postagem:", error);
+            } catch {
+                console.error("Erro ao carregar a postagem.");
                 setError("Erro ao carregar a postagem.");
             }
         };
@@ -58,8 +58,8 @@ const PostagemPage: React.FC = () => {
                 } else {
                     throw new Error("Erro ao buscar os comentários.");
                 }
-            } catch (error) {
-                console.error("Erro ao carregar os comentários:", error);
+            } catch {
+                console.error("Erro ao carregar os comentários.");
                 setError("Erro ao carregar os comentários.");
             }
         };
@@ -95,8 +95,8 @@ const PostagemPage: React.FC = () => {
                 const errorData = await response.json();
                 throw new Error(`Erro ao adicionar o comentário: ${errorData.error}`);
             }
-        } catch (error) {
-            console.error("Erro ao adicionar o comentário:", error);
+        } catch {
+            console.error("Erro ao adicionar o comentário.");
             setError("Erro ao adicionar o comentário.");
         }
     };
@@ -119,8 +119,8 @@ const PostagemPage: React.FC = () => {
                 const errorData = await response.json();
                 throw new Error(`Erro ao excluir o comentário: ${errorData.error}`);
             }
-        } catch (error) {
-            console.error("Erro ao excluir o comentário:", error);
+        } catch {
+            console.error("Erro ao excluir o comentário.");
             setError("Erro ao excluir o comentário.");
         }
     };
@@ -139,7 +139,7 @@ const PostagemPage: React.FC = () => {
 
     try {
         new URL(fotoUrl);
-    } catch (error) {
+    } catch {
         console.error("URL da imagem inválida:", fotoUrl);
     }
 
