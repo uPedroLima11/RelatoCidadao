@@ -23,10 +23,12 @@ const CardPostagem: React.FC<CardPostagemProps> = ({
   estadoNome,
   cidadeNome,
 }) => {
+  const fotoUrl = foto ? `${process.env.NEXT_PUBLIC_URL_API}${foto}` : '/default-image.jpg';
+
   return (
     <div className="mt-10 bg-[#f8f6fa] border-gray-500 border-[0.1rem] shadow-md rounded-lg max-w-sm md:max-w-md mx-auto mb-6">
       <Image
-        src={foto}
+        src={fotoUrl}
         alt="Imagem do problema"
         width={500}
         height={300}

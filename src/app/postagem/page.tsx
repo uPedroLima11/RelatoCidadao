@@ -18,7 +18,7 @@ export default function MinhasPostagens() {
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
     const [localizacao, setLocalizacao] = useState("");
-    const [foto, setFoto] = useState("");
+    const [foto, setFoto] = useState<File | null>(null);
     const [estadoId, setEstadoId] = useState<number | "">("");
     const [cidadeId, setCidadeId] = useState<number | "">("");
     const [estados, setEstados] = useState<Estado[]>([]);
@@ -72,56 +72,43 @@ export default function MinhasPostagens() {
         fetchCidades();
     }, [estadoId]);
 
-    const isValidUrl = (url: string) => {
-        try {
-            new URL(url);
-            return true;
-        } catch {
-            return false;
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!isValidUrl(foto)) {
-            setError("A URL da foto não é válida.");
-            return;
+        const formData = new FormData();
+        formData.append("titulo", titulo);
+        formData.append("descricao", descricao);
+        formData.append("localizacao", localizacao);
+        if (foto) {
+            formData.append("foto", foto);
         }
-
-        const formData = {
-            titulo,
-            descricao,
-            localizacao,
-            foto,
-            estadoId: Number(estadoId),
-            cidadeId: Number(cidadeId),
-        };
+        formData.append("estadoId", String(estadoId));
+        formData.append("cidadeId", String(cidadeId));
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     Authorization: `Bearer ${user?.token}`, 
                 },
-                body: JSON.stringify(formData),
+                body: formData,
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                setSuccessMessage("Postagem criada com sucesso!");
-                setTitulo("");
-                setDescricao("");
-                setLocalizacao("");
-                setFoto("");
-                setEstadoId("");
-                setCidadeId("");
-            } else {
-                console.error("Erro do servidor:", data.error);
-                setError(data.error || "Erro ao criar postagem");
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Erro do servidor:", errorData.error);
+                setError(errorData.error || "Erro ao criar postagem");
+                return;
             }
+
+            const data = await response.json();
+            setSuccessMessage("Postagem criada com sucesso!");
+            setTitulo("");
+            setDescricao("");
+            setLocalizacao("");
+            setFoto(null);
+            setEstadoId("");
+            setCidadeId("");
         } catch (error) {
             console.error("Erro ao criar postagem:", error);
             setError("Erro ao criar postagem");
@@ -169,12 +156,10 @@ export default function MinhasPostagens() {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium">Foto (URL):</label>
+                    <label className="block mb-2 text-sm font-medium">Foto:</label>
                     <input
-                        type="text"
-                        value={foto}
-                        maxLength={100}
-                        onChange={(e) => setFoto(e.target.value)}
+                        type="file"
+                        onChange={(e) => setFoto(e.target.files?.[0] || null)}
                         className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
                     />
@@ -222,8 +207,6 @@ export default function MinhasPostagens() {
 
             {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
             {error && <div className="text-red-500 mt-4">{error}</div>}
-           
         </div>
     );
-};
-
+}

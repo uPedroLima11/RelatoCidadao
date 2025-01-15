@@ -22,6 +22,7 @@ export default function MinhasPostagens() {
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [error, setError] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Postagem | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchPostagens = async () => {
@@ -57,29 +58,38 @@ export default function MinhasPostagens() {
 
   const handleEdit = (postagem: Postagem) => {
     setEditingPost(postagem);
+    setFile(null);
   };
 
   const handleSave = async () => {
     if (!editingPost || !user) return;
 
+    const formData = new FormData();
+    formData.append("titulo", editingPost.titulo);
+    formData.append("descricao", editingPost.descricao);
+    formData.append("localizacao", editingPost.localizacao);
+    if (file) {
+      formData.append("foto", file);
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/${editingPost.id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify(editingPost),
+        body: formData,
       });
 
       if (response.ok) {
+        const updatedPostagem = await response.json();
         setPostagens((prevPostagens) =>
-          prevPostagens.map((post) =>
-            post.id === editingPost.id ? { ...editingPost } : post
-          )
+          prevPostagens.map((post) => (post.id === updatedPostagem.id ? updatedPostagem : post))
         );
         alert("Postagem atualizada com sucesso!");
         setEditingPost(null);
+        setFile(null);
+        window.location.reload();
       } else {
         const errorData = await response.json();
         alert(errorData.error || "Erro ao atualizar a postagem.");
@@ -129,8 +139,7 @@ export default function MinhasPostagens() {
       <h1 className="text-3xl font-bold mb-4 text-center">Minhas Postagens</h1>
       {error && <div className="text-red-500 mt-4">{error}</div>}
       {postagens.length === 0 ? (
-        <div><p className="text-center">Você ainda não fez nenhuma postagem.</p>
-        <div className="mt-[32rem]"></div></div>
+        <p className="text-center">Você ainda não fez nenhuma postagem.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {postagens.map((postagem) => (
@@ -138,7 +147,7 @@ export default function MinhasPostagens() {
               <CardPostagem
                 titulo={postagem.titulo}
                 id={postagem.id}
-                nome={postagem.usuario.nome}
+                nome={postagem.usuario ? postagem.usuario.nome : "Desconhecido"}
                 descricao={postagem.descricao}
                 localizacao={postagem.localizacao}
                 foto={postagem.foto}
@@ -204,14 +213,15 @@ export default function MinhasPostagens() {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Foto URL:</label>
+              <label className="block mb-2">Foto:</label>
               <input
-                type="url"
-                value={editingPost.foto}
-                onChange={(e) =>
-                  setEditingPost({ ...editingPost, foto: e.target.value })
-                }
-                maxLength={200}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setFile(e.target.files[0]);
+                  }
+                }}
                 className="w-full border px-3 py-2 rounded"
               />
             </div>
@@ -224,7 +234,10 @@ export default function MinhasPostagens() {
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setEditingPost(null)}
+                onClick={() => {
+                  setEditingPost(null);
+                  setFile(null);
+                }}
               >
                 Cancelar
               </button>

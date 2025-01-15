@@ -133,11 +133,13 @@ const PostagemPage: React.FC = () => {
         return <div>Carregando... <div className="mt-[40rem]"></div></div>;
     }
 
+    const fotoUrl = postagem.foto ? `${process.env.NEXT_PUBLIC_URL_API}${postagem.foto}` : '/default-image.jpg';
+
     return (
         <div className="container mx-auto p-4">
             <div className="bg-white shadow-md rounded-lg p-4 mb-6">
                 <Image
-                    src={postagem.foto}
+                    src={fotoUrl}
                     alt={postagem.titulo}
                     width={800}
                     height={400}

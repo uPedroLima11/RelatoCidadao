@@ -71,7 +71,7 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
       ) : (
         <div>
         <p className="text-center">Nenhuma postagem encontrada.</p>
-        <div className="mt-[32rem]"></div></div>
+        <div className="mt-[52rem]"></div></div>
       )}
     </div>
   );

@@ -104,7 +104,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
           <div className="flex flex-col lg:flex-row lg:items-center">
             <div className="flex flex-col lg:flex-row lg:space-x-4">
               <select
-                className="bg-gray-700 text-white p-2 rounded text-base sm:text-base w-48 lg:w-auto mb-2 sm:mb-0"
+                className="bg-gray-700 text-white p-2 rounded text-base sm:text-base w-48 mb-2 sm:mb-0"
                 value={estadoSelecionado || ""}
                 onChange={(e) => setEstadoSelecionado(Number(e.target.value) || null)}
               >
@@ -116,7 +116,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                 ))}
               </select>
               <select
-                className="bg-gray-700 text-white p-2 rounded text-sm sm:text-base w-48 lg:w-auto"
+                className="bg-gray-700 text-white p-2 rounded text-sm sm:text-base w-48"
                 value={cidadeSelecionada || ""}
                 onChange={(e) => setCidadeSelecionada(Number(e.target.value) || null)}
                 disabled={!estadoSelecionado}
@@ -129,7 +129,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                 ))}
               </select>
             </div>
-            <div className="flex space-x-2 mt-1 lg:mt-0">
+            <div className="flex space-x-4 mt-1 lg:mt-0 ml-4">
               {estadoSelecionado !== null && cidadeSelecionada !== null && (
                 <button
                   onClick={handleFiltrar}
