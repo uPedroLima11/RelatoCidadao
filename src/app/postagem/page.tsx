@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../components/AuthContext"; 
+import { useAuth } from "../components/AuthContext";
 
 interface Estado {
     id: number;
@@ -14,7 +14,7 @@ interface Cidade {
 }
 
 export default function MinhasPostagens() {
-    const { user } = useAuth(); 
+    const { user } = useAuth();
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
     const [localizacao, setLocalizacao] = useState("");
@@ -54,8 +54,7 @@ export default function MinhasPostagens() {
                         `${process.env.NEXT_PUBLIC_URL_API}/estados/${estadoId}/cidades`
                     );
                     if (response.ok) {
-                        const data = await response.json();
-                        setCidades(data);
+                        setCidades(await response.json());
                     } else {
                         console.error("Erro ao buscar cidades.");
                         setError("Erro ao carregar cidades");
@@ -89,7 +88,7 @@ export default function MinhasPostagens() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens`, {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${user?.token}`, 
+                    Authorization: `Bearer ${user?.token}`,
                 },
                 body: formData,
             });
@@ -101,7 +100,6 @@ export default function MinhasPostagens() {
                 return;
             }
 
-            const data = await response.json();
             setSuccessMessage("Postagem criada com sucesso!");
             setTitulo("");
             setDescricao("");
