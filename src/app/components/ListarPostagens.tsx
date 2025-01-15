@@ -25,7 +25,7 @@ const ListaPostagens: React.FC<ListaPostagensProps> = ({ estadoId, cidadeId }) =
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [error, setError] = useState<string>("");
   const [paginaAtual, setPaginaAtual] = useState<number>(1);
-  const POSTAGENS_POR_PAGINA = 9;
+  const POSTAGENS_POR_PAGINA = 6;
 
   useEffect(() => {
     const fetchPostagens = async () => {
