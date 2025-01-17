@@ -19,12 +19,17 @@ export default function MinhasPostagens() {
     const [descricao, setDescricao] = useState("");
     const [localizacao, setLocalizacao] = useState("");
     const [foto, setFoto] = useState<File | null>(null);
-    const [estadoId, setEstadoId] = useState<number | "">("");
-    const [cidadeId, setCidadeId] = useState<number | "">("");
+    const [estadoInput, setEstadoInput] = useState("");
+    const [cidadeInput, setCidadeInput] = useState("");
+    const [estadoSelecionado, setEstadoSelecionado] = useState<Estado | null>(null);
+    const [cidadeSelecionada, setCidadeSelecionada] = useState<Cidade | null>(null);
     const [estados, setEstados] = useState<Estado[]>([]);
     const [cidades, setCidades] = useState<Cidade[]>([]);
+    const [filtradosEstados, setFiltradosEstados] = useState<Estado[]>([]);
+    const [filtradosCidades, setFiltradosCidades] = useState<Cidade[]>([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const fetchEstados = async () => {
@@ -46,14 +51,15 @@ export default function MinhasPostagens() {
     }, []);
 
     useEffect(() => {
-        const fetchCidades = async () => {
-            if (estadoId) {
+        if (estadoSelecionado) {
+            const fetchCidades = async () => {
                 try {
                     const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_URL_API}/estados/${estadoId}/cidades`
+                        `${process.env.NEXT_PUBLIC_URL_API}/estados/${estadoSelecionado.id}/cidades`
                     );
                     if (response.ok) {
-                        setCidades(await response.json());
+                        const data = await response.json();
+                        setCidades(data);
                     } else {
                         throw new Error("Erro ao buscar cidades.");
                     }
@@ -61,43 +67,71 @@ export default function MinhasPostagens() {
                     console.error("Erro ao conectar-se à API:", error);
                     setError("Erro ao carregar cidades");
                 }
-            } else {
-                setCidades([]);
-            }
-        };
+            };
 
-        fetchCidades();
-    }, [estadoId]);
+            fetchCidades();
+        }
+    }, [estadoSelecionado]);
+
+    const handleEstadoInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEstadoInput(value);
+        setFiltradosEstados(estados.filter((estado) =>
+            estado.nome.toLowerCase().includes(value.toLowerCase())
+        ));
+    };
+
+    const handleCidadeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setCidadeInput(value);
+        setFiltradosCidades(cidades.filter((cidade) =>
+            cidade.nome.toLowerCase().includes(value.toLowerCase())
+        ));
+    };
+
+    const handleEstadoSelect = (estado: Estado) => {
+        setEstadoInput(estado.nome);
+        setEstadoSelecionado(estado);
+        setFiltradosEstados([]);
+    };
+
+    const handleCidadeSelect = (cidade: Cidade) => {
+        setCidadeInput(cidade.nome);
+        setCidadeSelecionada(cidade);
+        setFiltradosCidades([]);
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+        if (isSubmitting) return;
+
+        if (!estadoSelecionado) {
+            setError("Selecione um estado válido.");
+            return;
+        }
+        if (!cidadeSelecionada) {
+            setError("Selecione uma cidade válida.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
         const formData = new FormData();
         formData.append("titulo", titulo);
         formData.append("descricao", descricao);
         formData.append("localizacao", localizacao);
-    
+
         if (foto) {
             formData.append("foto", foto);
         } else {
             setError("A imagem é obrigatória.");
+            setIsSubmitting(false);
             return;
         }
-    
-        if (estadoId !== "") {
-            formData.append("estadoId", String(estadoId));
-        } else {
-            setError("Estado é obrigatório.");
-            return;
-        }
-    
-        if (cidadeId !== "") {
-            formData.append("cidadeId", String(cidadeId));
-        } else {
-            setError("Cidade é obrigatória.");
-            return;
-        }
-    
+
+        formData.append("estadoId", String(estadoSelecionado.id));
+        formData.append("cidadeId", String(cidadeSelecionada.id));
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens`, {
                 method: "POST",
@@ -106,29 +140,32 @@ export default function MinhasPostagens() {
                 },
                 body: formData,
             });
-    
+
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("Erro do servidor:", errorText);
                 setError("Erro ao criar postagem");
+                setIsSubmitting(false);
                 return;
             }
-    
+
             setSuccessMessage("Postagem criada com sucesso!");
             setTitulo("");
             setDescricao("");
             setLocalizacao("");
             setFoto(null);
-            setEstadoId("");
-            setCidadeId("");
-            setCidades([]);
+            setEstadoInput("");
+            setCidadeInput("");
+            setEstadoSelecionado(null);
+            setCidadeSelecionada(null);
             setError("");
         } catch (error) {
             console.error("Erro ao criar postagem:", error);
             setError("Erro ao criar postagem");
+        } finally {
+            setIsSubmitting(false);
         }
     };
-    
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-4 text-center">Criar Postagem</h1>
@@ -179,46 +216,63 @@ export default function MinhasPostagens() {
                         accept="image/*"
                         required
                     />
-
                 </div>
 
                 <div className="mb-4">
                     <label className="block mb-2 text-sm font-medium">Estado:</label>
-                    <select
-                        value={estadoId}
-                        onChange={(e) => setEstadoId(Number(e.target.value))}
-                        className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    >
-                        <option value="">Selecione o Estado</option>
-                        {estados.map((estado) => (
-                            <option key={estado.id} value={estado.id}>
-                                {estado.nome}
-                            </option>
-                        ))}
-                    </select>
+                    <input
+                        type="text"
+                        value={estadoInput}
+                        onChange={handleEstadoInputChange}
+                        className="p-2 border border-gray-300 rounded w-full focus:outline-none"
+                        placeholder="Digite o estado"
+                    />
+                    {filtradosEstados.length > 0 && (
+                        <ul className="bg-white border border-gray-300 mt-2 rounded shadow-md max-h-48 overflow-y-auto">
+                            {filtradosEstados.map((estado) => (
+                                <li
+                                    key={estado.id}
+                                    onClick={() => handleEstadoSelect(estado)}
+                                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    {estado.nome}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
 
                 <div className="mb-4">
                     <label className="block mb-2 text-sm font-medium">Cidade:</label>
-                    <select
-                        value={cidadeId}
-                        onChange={(e) => setCidadeId(Number(e.target.value))}
-                        className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                        disabled={!estadoId}
-                    >
-                        <option value="">Selecione a Cidade</option>
-                        {cidades.map((cidade) => (
-                            <option key={cidade.id} value={cidade.id}>
-                                {cidade.nome}
-                            </option>
-                        ))}
-                    </select>
+                    <input
+                        type="text"
+                        value={cidadeInput}
+                        onChange={handleCidadeInputChange}
+                        className="p-2 border border-gray-300 rounded w-full focus:outline-none"
+                        placeholder="Digite a cidade"
+                        disabled={!estadoSelecionado}
+                    />
+                    {filtradosCidades.length > 0 && (
+                        <ul className="bg-white border border-gray-300 mt-2 rounded shadow-md max-h-48 overflow-y-auto">
+                            {filtradosCidades.map((cidade) => (
+                                <li
+                                    key={cidade.id}
+                                    onClick={() => handleCidadeSelect(cidade)}
+                                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    {cidade.nome}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
 
-                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
-                    Enviar Postagem
+                <button
+                    type="submit"
+                    className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? "Enviando..." : "Enviar Postagem"}
                 </button>
             </form>
 
