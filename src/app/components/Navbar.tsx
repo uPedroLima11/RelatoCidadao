@@ -32,6 +32,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
   const pathname = usePathname();
 
   const isMinhasPostagensPage = pathname === "/minhasPostagens";
+  const isCriarPostagensPage = pathname === "/postagem";
 
   useEffect(() => {
     const fetchEstados = async () => {
@@ -104,7 +105,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
             Relato Cidadão
           </Link>
         </div>
-        <div className="flex items-center sm:hidden">
+        <div className="flex items-center lg:hidden">
           <button onClick={toggleMenu} className="text-white text-sm">
             {isMenuOpen ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -121,7 +122,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
         >
           {isAuthenticated ? (
             <div className="flex flex-col lg:flex-row lg:items-center">
-              {!isMinhasPostagensPage && (
+              {!isMinhasPostagensPage && !isCriarPostagensPage &&(
                 <div className="flex flex-col lg:flex-row lg:space-x-4">
                   <div className="flex flex-col lg:flex-row lg:space-x-4">
                     <input
