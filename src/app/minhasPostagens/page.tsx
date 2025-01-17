@@ -18,7 +18,7 @@ interface Postagem {
 }
 
 export default function MinhasPostagens() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, refreshToken } = useAuth();
   const [postagens, setPostagens] = useState<Postagem[]>([]);
   const [error, setError] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Postagem | null>(null);
@@ -32,6 +32,8 @@ export default function MinhasPostagens() {
       }
 
       try {
+        await refreshToken();
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -54,7 +56,7 @@ export default function MinhasPostagens() {
     if (!isLoading) {
       fetchPostagens();
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, refreshToken]); 
 
   const handleEdit = (postagem: Postagem) => {
     setEditingPost(postagem);
@@ -139,8 +141,10 @@ export default function MinhasPostagens() {
       <h1 className="text-3xl font-bold mb-4 text-center">Minhas Postagens</h1>
       {error && <div className="text-red-500 mt-4">{error}</div>}
       {postagens.length === 0 ? (
-        <div> <p className="text-center">Você ainda não fez nenhuma postagem.</p>
-        <div className="mt-[50rem]"></div></div>
+        <div>
+          <p className="text-center">Você ainda não fez nenhuma postagem.</p>
+          <div className="mt-[50rem]"></div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {postagens.map((postagem) => (
