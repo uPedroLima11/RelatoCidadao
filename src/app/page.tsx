@@ -34,12 +34,12 @@ export default function Home() {
           </p>
           <div className="flex justify-center gap-4">
             <Link href="/registro">
-              <p className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 md:py-2 md:px-6 rounded text-sm md:text-base">
+              <p className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 md:py-2 md:px-6 rounded">
                 Registre-se Agora
               </p>
             </Link>
             <Link href="/saiba-mais">
-              <p className="bg-gray-700 hover:bg-gray-800 text-white py-1 px-4 md:py-2 md:px-6 rounded text-sm md:text-base">
+              <p className="bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 md:py-2 md:px-6 rounded">
                 Saiba Mais
               </p>
             </Link>

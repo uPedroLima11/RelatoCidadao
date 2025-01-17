@@ -99,7 +99,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
           </Link>
           <Link
             href={isAuthenticated ? "/pagina-logada" : "/"} scroll={false}
-            className="text-white text-center text-lg sm:text-xl font-bold"
+            className="text-white text-center text-[1.1rem] sm:text-xl font-bold"
           >
             Relato Cidadão
           </Link>
@@ -176,7 +176,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
               <div className="flex space-x-4">
                 <Link
                   href="/postagem"
-                  className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-500 text-white px-2 sm:px-4 py rounded-2xl text-base sm:text-base flex items-center justify-center"
+                  className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-500 text-white px-2 sm:px-4 py-2 rounded-2xl text-base sm:text-base flex items-center justify-center"
                 >
                   Criar
                 </Link>
@@ -195,20 +195,21 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center space-y-2 lg:space-y-0 lg:space-x-4 w-full">
+            <div className="flex space-x-3 sm:mt-2 mt-3 -mr-3">
               <Link
                 href="/login"
-                className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-500 text-white text-center text-sm lg:text-base px-4 py-2 rounded-xl w-18 lg:w-auto"
+                className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-500 text-white text-center text-base lg:text-base px-4 py-2 rounded-xl flex-grow"
               >
                 Login
               </Link>
               <Link
                 href="/registro"
-                className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-blue-600 text-white text-center text-base lg:text-base px-4 py-2 rounded-xl w-18 lg:w-auto"
+                className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-blue-600 text-white text-center text-base lg:text-base px-4 py-2 rounded-xl flex-grow"
               >
                 Registro
               </Link>
             </div>
+
           )}
         </div>
       </div>
@@ -221,7 +222,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
           >
             {isMenuOpen ? (
               <svg
-                className="h-4 w-4" 
+                className="h-4 w-4"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -236,7 +237,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
               </svg>
             ) : (
               <svg
-                className="h-4 w-4" 
+                className="h-4 w-4"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
