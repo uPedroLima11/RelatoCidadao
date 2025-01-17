@@ -125,6 +125,14 @@ const PostagemPage: React.FC = () => {
         }
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        if (value.length <= 300) {
+            setNovoComentario(value);
+            setError(""); 
+        }
+    };
+
     if (error) {
         return <div className="text-red-500">{error}</div>;
     }
@@ -154,17 +162,17 @@ const PostagemPage: React.FC = () => {
                     className="rounded-lg"
                 />
                 <h1 className="text-2xl font-bold mt-4">{postagem.titulo}</h1>
-                <p className="text-gray-700">{postagem.descricao}</p>
-                <p className="text-gray-500 mt-2">
+                <p className="text-black-700">{postagem.descricao}</p>
+                <p className="text-black-500 mt-2">
                     <strong>Local:</strong> {postagem.localizacao}
                 </p>
-                <p className="text-gray-500">
+                <p className="text-black-500">
                     <strong>Usuário:</strong> {postagem.usuarioNome}
                 </p>
-                <p className="text-gray-500">
+                <p className="text-black-500">
                     <strong>Estado:</strong> {postagem.estadoNome}
                 </p>
-                <p className="text-gray-500">
+                <p className="text-black-500">
                     <strong>Cidade:</strong> {postagem.cidadeNome}
                 </p>
             </div>
@@ -175,7 +183,7 @@ const PostagemPage: React.FC = () => {
                     {comentarios.map((comentario) => (
                         <li key={comentario.id} className="mb-2">
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-700">
+                                <p className="text-black ">
                                     <strong>{comentario.usuarioNome}:</strong> {comentario.conteudo}
                                 </p>
                                 {comentario.usuarioNome === user?.nomeCompleto && (
@@ -191,7 +199,7 @@ const PostagemPage: React.FC = () => {
                     <input
                         type="text"
                         value={novoComentario}
-                        onChange={(e) => setNovoComentario(e.target.value)}
+                        onChange={handleInputChange} 
                         className="border border-gray-300 rounded-lg p-2 flex-grow"
                         placeholder="Adicionar um comentário..."
                     />
@@ -202,6 +210,9 @@ const PostagemPage: React.FC = () => {
                         Enviar
                     </button>
                 </div>
+                <p className="text-gray-500 mt-2">
+                    {300 - novoComentario.length} caracteres restantes
+                </p>
             </div>
         </div>
     );
