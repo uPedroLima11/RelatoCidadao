@@ -30,33 +30,45 @@ export default function MinhasPostagens() {
         setError("Usuário não autenticado.");
         return;
       }
-
+    
       try {
-        await refreshToken();
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
+    
+        if (!response.ok) {
+          await refreshToken();
+          const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          });
 
-        const data = await response.json();
-
-        if (response.ok) {
-          setPostagens(data);
+          if (retryResponse.ok) {
+            const retryData = await retryResponse.json();
+            setPostagens(retryData);
+          } else {
+            const retryData = await retryResponse.json();
+            setError(retryData.error || "Erro ao carregar postagens");
+          }
         } else {
-          setError(data.error || "Erro ao carregar postagens");
+          const data = await response.json();
+          setPostagens(data);
         }
       } catch (error) {
         console.error("Erro ao conectar-se à API:", error);
         setError("Erro ao carregar postagens");
       }
     };
+    
+
 
     if (!isLoading) {
       fetchPostagens();
     }
-  }, [user, isLoading, refreshToken]); 
+  }, [user, isLoading, refreshToken]);
 
   const handleEdit = (postagem: Postagem) => {
     setEditingPost(postagem);

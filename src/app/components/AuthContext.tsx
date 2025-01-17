@@ -47,25 +47,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const refreshToken = async () => {
+  const refreshToken = async (): Promise<void> => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL_API}/auth/refresh`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       });
-
+  
       const { token } = response.data;
       if (token) {
         setToken(token);
+        return; 
       } else {
         throw new Error("Erro ao renovar o token");
       }
     } catch (error) {
       console.error("Erro ao renovar o token:", error);
       logout();
+      return; 
     }
   };
+  
 
   const login = async (email: string, senha: string, continuarConectado: boolean) => {
     try {
