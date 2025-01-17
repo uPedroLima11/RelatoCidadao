@@ -104,7 +104,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
             Relato Cidadão
           </Link>
         </div>
-        <div className="flex items-center lg:hidden">
+        <div className="flex items-center sm:hidden">
           <button onClick={toggleMenu} className="text-white text-sm">
             {isMenuOpen ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -154,7 +154,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                     {estadoSelecionado && cidadeSelecionada && (
                       <button
                         onClick={handleFiltrar}
-                        className="bg-green-700 -ml-2 mr-2 sm:-ml-0 sm:mr-0 text-white px-2 sm:px-4 sm:py-3 py-2 rounded text-base sm:text-sm"
+                        className="bg-green-700 -ml-4 mr-2 sm:-ml-0 sm:mr-0 text-white px-2 sm:px-3 sm:py-1 py-2 rounded text-base sm:text-[0.92rem]"
                       >
                         Filtrar
                       </button>
@@ -162,7 +162,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                     {(estadoSelecionado || cidadeSelecionada) && (
                       <button
                         onClick={handleRemoverFiltro}
-                        className="bg-red-400 text-white px-2 sm:px-4 sm:py-3 py-2 rounded text-base sm:text-sm"
+                        className="bg-red-400 text-white px-2 sm:px-3 sm:py-1 py-2 rounded sm:text-[0.92rem]"
                       >
                         Remover Filtro
                       </button>
@@ -170,10 +170,10 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
                   </div>
                 </div>
               )}
-              <span className="text-white text-base sm:text-lg mr-2">
+              <div><span className="text-white text-base sm:text-lg sm:ml-5 sm:mr-4">
                 Bem-vindo, {user?.nomeCompleto.split(" ")[0]}!
-              </span>
-              <div className="flex space-x-4">
+              </span></div>
+              <div className="flex space-x-4 mt-1 sm:mt-0">
                 <Link
                   href="/postagem"
                   className="hover:scale-110 transition delay-150 duration-300 ease-in-out bg-gray-500 text-white px-2 sm:px-4 py-2 rounded-2xl text-base sm:text-base flex items-center justify-center"
