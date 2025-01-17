@@ -30,6 +30,9 @@ const PostagemPage: React.FC = () => {
     const [comentarios, setComentarios] = useState<Comentario[]>([]);
     const [novoComentario, setNovoComentario] = useState("");
     const [error, setError] = useState("");
+    const [comentarioParaExcluir, setComentarioParaExcluir] = useState<number | null>(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
 
     useEffect(() => {
         if (!id) return;
@@ -101,11 +104,17 @@ const PostagemPage: React.FC = () => {
         }
     };
 
-    const handleExcluirComentario = async (comentarioId: number) => {
+    const handleExcluirComentario = (comentarioId: number) => {
+        setComentarioParaExcluir(comentarioId);
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = async () => {
+        if (comentarioParaExcluir === null) return;
         const token = user?.token;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/comentarios/${comentarioId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/comentarios/${comentarioParaExcluir}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -113,8 +122,9 @@ const PostagemPage: React.FC = () => {
             });
 
             if (response.ok) {
-                setComentarios((prev) => prev.filter((comentario) => comentario.id !== comentarioId));
-                alert("Comentário apagado com sucesso!");
+                setComentarios((prev) => prev.filter((comentario) => comentario.id !== comentarioParaExcluir));
+                setModalMessage("Comentário apagado com sucesso!");
+                setShowDeleteConfirm(false);
             } else {
                 const errorData = await response.json();
                 throw new Error(`Erro ao excluir o comentário: ${errorData.error}`);
@@ -131,6 +141,10 @@ const PostagemPage: React.FC = () => {
             setNovoComentario(value);
             setError(""); 
         }
+    };
+
+    const handleSuccessModalClose = () => {
+        setModalMessage("");
     };
 
     if (error) {
@@ -214,6 +228,46 @@ const PostagemPage: React.FC = () => {
                     {300 - novoComentario.length} caracteres restantes
                 </p>
             </div>
+
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-bold mb-4">Confirmação de Remoção</h2>
+                        <p>Você tem certeza que deseja remover este comentário?</p>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+                                onClick={confirmDelete}
+                            >
+                                Remover
+                            </button>
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded"
+                                onClick={() => setShowDeleteConfirm(false)}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalMessage && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-bold mb-4">Sucesso!</h2>
+                        <p>{modalMessage}</p>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                                onClick={handleSuccessModalClose}
+                            >
+                                Fechar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

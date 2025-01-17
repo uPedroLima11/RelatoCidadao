@@ -23,6 +23,10 @@ export default function MinhasPostagens() {
   const [error, setError] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Postagem | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [postToDelete, setPostToDelete] = useState<number | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const fetchPostagens = async () => {
@@ -30,14 +34,14 @@ export default function MinhasPostagens() {
         setError("Usuário não autenticado.");
         return;
       }
-    
+
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
-    
+
         if (!response.ok) {
           await refreshToken();
           const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
@@ -62,8 +66,6 @@ export default function MinhasPostagens() {
         setError("Erro ao carregar postagens");
       }
     };
-    
-
 
     if (!isLoading) {
       fetchPostagens();
@@ -100,44 +102,63 @@ export default function MinhasPostagens() {
         setPostagens((prevPostagens) =>
           prevPostagens.map((post) => (post.id === updatedPostagem.id ? updatedPostagem : post))
         );
-        alert("Postagem atualizada com sucesso!");
+        setModalMessage("Postagem alterada com sucesso!");
+        setShowSuccessModal(true);
         setEditingPost(null);
         setFile(null);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         const errorData = await response.json();
-        alert(errorData.error || "Erro ao atualizar a postagem.");
+        setModalMessage("Erro ao alterar postagem.");
+        setShowSuccessModal(true);
       }
     } catch (error) {
       console.error("Erro ao salvar a postagem:", error);
+      setModalMessage("Erro ao alterar postagem.");
+      setShowSuccessModal(true);
     }
   };
 
-  const handleDelete = async (postId: number) => {
-    if (confirm("Tem certeza que deseja remover esta postagem?")) {
-      try {
-        if (!user) {
-          alert("Usuário não autenticado.");
-          return;
-        }
+  const handleDelete = (postId: number) => {
+    setPostToDelete(postId);
+    setShowDeleteConfirm(true); 
+  };
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/${postId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+  const confirmDelete = async () => {
+    if (!user || postToDelete === null) return;
 
-        if (response.ok) {
-          setPostagens((prevPostagens) => prevPostagens.filter((postagem) => postagem.id !== postId));
-          alert("Postagem removida com sucesso!");
-        } else {
-          alert("Erro ao remover a postagem.");
-        }
-      } catch (error) {
-        console.error("Erro ao remover a postagem:", error);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/${postToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (response.ok) {
+        setPostagens((prevPostagens) => prevPostagens.filter((postagem) => postagem.id !== postToDelete));
+        setModalMessage("Postagem removida com sucesso!");
+        setShowSuccessModal(true);
+      } else {
+        alert("Erro ao remover a postagem.");
       }
+    } catch (error) {
+      console.error("Erro ao remover a postagem:", error);
+    } finally {
+      setShowDeleteConfirm(false);
+      setPostToDelete(null);
     }
+  };
+
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false);
+  };
+
+  const handleDeleteConfirmClose = () => {
+    setShowDeleteConfirm(false);
+    setPostToDelete(null); 
   };
 
   if (isLoading) {
@@ -242,19 +263,56 @@ export default function MinhasPostagens() {
                 className="w-full border px-3 py-2 rounded"
               />
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-2">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
                 onClick={handleSave}
               >
                 Salvar
               </button>
               <button
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => {
-                  setEditingPost(null);
-                  setFile(null);
-                }}
+                className="bg-gray-300 text-black px-4 py-2 rounded"
+                onClick={() => setEditingPost(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Sucesso!</h2>
+            <p>{modalMessage}</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleSuccessModalClose}
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Confirmação de Remoção</h2>
+            <p>Você tem certeza que deseja remover esta postagem?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+                onClick={confirmDelete}
+              >
+                Remover
+              </button>
+              <button
+                className="bg-gray-300 text-black px-4 py-2 rounded"
+                onClick={handleDeleteConfirmClose}
               >
                 Cancelar
               </button>

@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/AuthContext";
@@ -27,9 +27,10 @@ export default function MinhasPostagens() {
     const [cidades, setCidades] = useState<Cidade[]>([]);
     const [filtradosEstados, setFiltradosEstados] = useState<Estado[]>([]);
     const [filtradosCidades, setFiltradosCidades] = useState<Cidade[]>([]);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [error, setError] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [showModal, setShowModal] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchEstados = async () => {
@@ -144,12 +145,14 @@ export default function MinhasPostagens() {
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("Erro do servidor:", errorText);
-                setError("Erro ao criar postagem");
+                setModalMessage("Erro ao criar postagem");
+                setShowModal(true);
                 setIsSubmitting(false);
                 return;
             }
 
-            setSuccessMessage("Postagem criada com sucesso!");
+            setModalMessage("Postagem criada com sucesso!");
+            setShowModal(true);
             setTitulo("");
             setDescricao("");
             setLocalizacao("");
@@ -161,11 +164,18 @@ export default function MinhasPostagens() {
             setError("");
         } catch (error) {
             console.error("Erro ao criar postagem:", error);
-            setError("Erro ao criar postagem");
+            setModalMessage("Erro ao criar postagem");
+            setShowModal(true);
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    const handleModalClose = () => {
+        setShowModal(false);
+        setModalMessage("");
+    };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-4 text-center">Criar Postagem</h1>
@@ -267,17 +277,27 @@ export default function MinhasPostagens() {
                     )}
                 </div>
 
+                {error && <p className="text-red-500">{error}</p>}
+
                 <button
                     type="submit"
-                    className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`bg-green-500 text-white px-4 py-2 rounded ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? "Enviando..." : "Enviar Postagem"}
+                    {isSubmitting ? "Criando..." : "Criar Postagem"}
                 </button>
             </form>
 
-            {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
-            {error && <div className="text-red-500 mt-4">{error}</div>}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded shadow-md">
+                        <p className="mb-4">{modalMessage}</p>
+                        <button onClick={handleModalClose} className="bg-blue-500 text-white px-4 py-2 rounded">
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
