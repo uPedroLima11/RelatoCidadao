@@ -111,7 +111,7 @@ export default function MinhasPostagens() {
         }, 500);
       } else {
         const errorData = await response.json();
-        setModalMessage("Erro ao alterar postagem.");
+        setModalMessage(errorData.error || "Erro ao alterar postagem."); 
         setShowSuccessModal(true);
       }
     } catch (error) {
@@ -123,7 +123,7 @@ export default function MinhasPostagens() {
 
   const handleDelete = (postId: number) => {
     setPostToDelete(postId);
-    setShowDeleteConfirm(true); 
+    setShowDeleteConfirm(true);
   };
 
   const confirmDelete = async () => {
@@ -158,7 +158,7 @@ export default function MinhasPostagens() {
 
   const handleDeleteConfirmClose = () => {
     setShowDeleteConfirm(false);
-    setPostToDelete(null); 
+    setPostToDelete(null);
   };
 
   if (isLoading) {
