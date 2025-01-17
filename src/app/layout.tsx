@@ -49,7 +49,7 @@ export default function RootLayout({
 
   return (
     <AuthProvider>
-      <html lang="en">
+      <html lang="pt-br">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
