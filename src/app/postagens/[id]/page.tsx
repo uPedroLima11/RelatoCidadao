@@ -23,7 +23,7 @@ interface Postagem {
     cidadeNome: string;
 }
 
-const PostagemPage: React.FC = () => {
+export default function PostagemPage() {
     const { id } = useParams();
     const { user } = useAuth();
     const [postagem, setPostagem] = useState<Postagem | null>(null);
@@ -272,4 +272,3 @@ const PostagemPage: React.FC = () => {
     );
 };
 
-export default PostagemPage;
