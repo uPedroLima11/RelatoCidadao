@@ -125,11 +125,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         throw new Error("Usuário não retornado na resposta.");
       }
-    } catch (error: any) {
-      console.error("Erro no registro:", error.message);
-      throw new Error(error.message || "Erro no registro. Tente novamente mais tarde.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Erro no registro:", error.message);
+        throw new Error(error.message || "Erro no registro. Tente novamente mais tarde.");
+      } else {
+        console.error("Erro no registro:", error);
+        throw new Error("Erro no registro. Tente novamente mais tarde.");
+      }
     }
   };
+  
   const logout = () => {
     setUser(null);
     Cookies.remove("token_usuario_logado");
