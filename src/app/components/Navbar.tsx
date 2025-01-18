@@ -33,7 +33,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
 
   const isMinhasPostagensPage = pathname === "/minhasPostagens";
   const isCriarPostagensPage = pathname === "/postagem";
-
+  const isComentariosPage = pathname.startsWith("/postagens/");
   useEffect(() => {
     const fetchEstados = async () => {
       try {
@@ -122,7 +122,7 @@ export default function Navbar({ onFiltrar, onRemoverFiltro }: NavbarProps) {
         >
           {isAuthenticated ? (
             <div className="flex flex-col lg:flex-row lg:items-center">
-              {!isMinhasPostagensPage && !isCriarPostagensPage &&(
+              {!isMinhasPostagensPage && !isCriarPostagensPage && !isComentariosPage &&(
                 <div className="flex flex-col lg:flex-row lg:space-x-4">
                   <div className="flex flex-col lg:flex-row lg:space-x-4">
                     <input
