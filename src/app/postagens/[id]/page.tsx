@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "../../components/AuthContext";
+import Cookies from "js-cookie";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,9 +19,11 @@ interface Postagem {
     descricao: string;
     localizacao: string;
     foto: string;
-    usuarioNome: string;
-    estadoNome: string;
-    cidadeNome: string;
+    usuario: {
+        nome: string;
+    };
+    estadoNome?: string; 
+    cidadeNome?: string; 
 }
 
 export default function PostagemPage() {
@@ -39,22 +42,37 @@ export default function PostagemPage() {
 
         const fetchPostagem = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/${id}`);
+                const token = Cookies.get("token_usuario_logado");
+                const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/${id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
                 if (response.ok) {
                     const data = await response.json();
+                    console.log("Dados da postagem:", data);
                     setPostagem(data);
                 } else {
                     throw new Error("Erro ao buscar a postagem.");
                 }
-            } catch {
-                console.error("Erro ao carregar a postagem.");
+            } catch (error) {
+                console.error("Erro ao carregar a postagem:", error);
                 setError("Erro ao carregar a postagem.");
             }
         };
 
         const fetchComentarios = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/comentarios/${id}`);
+                const token = Cookies.get("token_usuario_logado");
+                const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/comentarios/${id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setComentarios(data);
@@ -139,7 +157,7 @@ export default function PostagemPage() {
         const { value } = e.target;
         if (value.length <= 300) {
             setNovoComentario(value);
-            setError(""); 
+            setError("");
         }
     };
 
@@ -181,13 +199,13 @@ export default function PostagemPage() {
                     <strong>Local:</strong> {postagem.localizacao}
                 </p>
                 <p className="text-black-500">
-                    <strong>Usuário:</strong> {postagem.usuarioNome}
+                    <strong>Usuário:</strong> {postagem.usuario.nome}
                 </p>
                 <p className="text-black-500">
-                    <strong>Estado:</strong> {postagem.estadoNome}
+                    <strong>Estado:</strong> {postagem.estadoNome || "Não informado"} 
                 </p>
                 <p className="text-black-500">
-                    <strong>Cidade:</strong> {postagem.cidadeNome}
+                    <strong>Cidade:</strong> {postagem.cidadeNome || "Não informada"}
                 </p>
             </div>
 
@@ -213,7 +231,7 @@ export default function PostagemPage() {
                     <input
                         type="text"
                         value={novoComentario}
-                        onChange={handleInputChange} 
+                        onChange={handleInputChange}
                         className="border border-gray-300 rounded-lg p-2 flex-grow"
                         placeholder="Adicionar um comentário..."
                     />
@@ -255,7 +273,7 @@ export default function PostagemPage() {
             {modalMessage && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-xl font-bold mb-4">Sucesso!</h2>
+                        <h2 className="text-xl font-bold mb-4">Sucesso</h2>
                         <p>{modalMessage}</p>
                         <div className="flex justify-end mt-4">
                             <button
@@ -270,5 +288,4 @@ export default function PostagemPage() {
             )}
         </div>
     );
-};
-
+}
