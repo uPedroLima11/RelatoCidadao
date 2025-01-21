@@ -101,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const register = async (nome: string, email: string, senha: string): Promise<User> => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/usuarios/register`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/usuarios/registro`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
