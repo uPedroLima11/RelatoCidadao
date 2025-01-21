@@ -12,6 +12,7 @@ interface Postagem {
   foto: string;
   estadoNome: string;
   cidadeNome: string;
+  status: string;
   usuario: {
     nome: string;
   };
@@ -193,6 +194,9 @@ export default function MinhasPostagens() {
                 cidadeNome={postagem.cidadeNome}
               />
               <div className="mt-2 flex justify-center space-x-4">
+                <span className={`px-2 py-1 rounded ${postagem.status === 'aprovado' ? 'bg-green-500 rounded-xl text-white' : 'bg-yellow-500 rounded-xl text-black font-semibold'}`}>
+                  {postagem.status === 'aprovado' ? 'Aprovado' : 'Pendente'}
+                </span>
                 <button
                   className="bg-[#253746] rounded-xl p-2 text-white"
                   onClick={() => handleEdit(postagem)}

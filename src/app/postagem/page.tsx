@@ -151,7 +151,7 @@ export default function MinhasPostagens() {
                 return;
             }
 
-            setModalMessage("Postagem criada com sucesso!");
+            setModalMessage("Postagem criada com sucesso e enviada para ser aprovada!");
             setShowModal(true);
             setTitulo("");
             setDescricao("");
