@@ -37,7 +37,7 @@ export default function MinhasPostagens() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
+        let response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -45,26 +45,23 @@ export default function MinhasPostagens() {
 
         if (!response.ok) {
           await refreshToken();
-          const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
+          response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/postagens/meus`, {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
           });
 
-          if (retryResponse.ok) {
-            const retryData = await retryResponse.json();
-            setPostagens(retryData);
-          } else {
-            const retryData = await retryResponse.json();
-            setError(retryData.error || "Erro ao carregar postagens");
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Erro ao carregar postagens");
           }
-        } else {
-          const data = await response.json();
-          setPostagens(data);
         }
-      } catch (error) {
-        console.error("Erro ao conectar-se à API:", error);
-        setError("Erro ao carregar postagens");
+
+        const data = await response.json();
+        setPostagens(data);
+      } catch (error: any) {
+        console.error("Erro ao conectar-se à API:", error.message);
+        setError(error.message || "Erro ao carregar postagens");
       }
     };
 
@@ -72,7 +69,6 @@ export default function MinhasPostagens() {
       fetchPostagens();
     }
   }, [user, isLoading, refreshToken]);
-
   const handleEdit = (postagem: Postagem) => {
     setEditingPost(postagem);
     setFile(null);

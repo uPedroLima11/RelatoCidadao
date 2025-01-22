@@ -14,13 +14,12 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, senha: string, continuarConectado: boolean) => Promise<boolean>; 
+  login: (email: string, senha: string, continuarConectado: boolean) => Promise<boolean>;
   register: (nome: string, email: string, senha: string) => Promise<User>;
   logout: () => void;
   setToken: (token: string) => void;
   refreshToken: () => Promise<void>;
 }
-
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -38,6 +37,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     setIsLoading(false);
+
+    const interval = setInterval(() => {
+      refreshToken().catch(() => {
+        logout();
+      });
+    }, 15 * 60 * 1000); 
+
+    return () => clearInterval(interval);
   }, []);
 
   const setToken = (token: string) => {
@@ -55,40 +62,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           Authorization: `Bearer ${user?.token}`,
         },
       });
-  
+
       const { token } = response.data;
       if (token) {
         setToken(token);
-        return; 
       } else {
         throw new Error("Erro ao renovar o token");
       }
     } catch (error) {
       console.error("Erro ao renovar o token:", error);
       logout();
-      return; 
     }
   };
-  
 
   const login = async (email: string, senha: string, continuarConectado: boolean): Promise<boolean> => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_URL_API}/usuarios/login`, { email, senha });
-  
+
       if (response.status === 200) {
         const { token, usuario } = response.data;
-  
-        Cookies.set("token_usuario_logado", token);
-        Cookies.set("nomeCompleto", usuario.nome);
-  
-        if (continuarConectado) {
-          localStorage.setItem("client_key", JSON.stringify(usuario.id));
-        } else {
-          localStorage.removeItem("client_key");
-        }
-  
+
+        Cookies.set("token_usuario_logado", token, { expires: continuarConectado ? 7 : undefined });
+        Cookies.set("nomeCompleto", usuario.nome, { expires: continuarConectado ? 7 : undefined });
+
         setUser({ nomeCompleto: usuario.nome, token });
-        return true; 
+        return true;
       } else {
         throw new Error("Credenciais inválidas. Verifique e tente novamente.");
       }
@@ -97,8 +95,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error("Erro no login. Verifique suas credenciais ou tente novamente mais tarde.");
     }
   };
-  
-  
+
   const register = async (nome: string, email: string, senha: string): Promise<User> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/usuarios/registro`, {
@@ -108,23 +105,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
         body: JSON.stringify({ nome, email, senha }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Erro ao registrar.");
       }
-  
+
       const data = await response.json();
       const { token, usuario } = data;
-  
-      if (usuario && usuario.nome) {
-        Cookies.set("token_usuario_logado", token);
-        Cookies.set("nomeCompleto", usuario.nome);
-        setUser({ nomeCompleto: usuario.nome, token });
-        return { nomeCompleto: usuario.nome, token };
-      } else {
-        throw new Error("Usuário não retornado na resposta.");
-      }
+
+      Cookies.set("token_usuario_logado", token);
+      Cookies.set("nomeCompleto", usuario.nome);
+      setUser({ nomeCompleto: usuario.nome, token });
+
+      return { nomeCompleto: usuario.nome, token };
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Erro no registro:", error.message);
@@ -135,7 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
   };
-  
+
   const logout = () => {
     setUser(null);
     Cookies.remove("token_usuario_logado");
