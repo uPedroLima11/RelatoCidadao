@@ -99,8 +99,8 @@ export default function Registro() {
                 Certifique-se de que esses requisitos sejam atendidos:
               </span>
               <ul className="mt-1.5 list-disc list-inside">
-                <li>Pelo menos 10 caracteres (e até 100 caracteres)</li>
-                <li>Pelo menos um caractere minúsculo</li>
+                <li>Pelo menos 10 caracteres</li>
+                <li>Pelo menos um caractere minúsculo (a-z)</li>
               </ul>
             </div>
           </div>
