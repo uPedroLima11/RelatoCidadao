@@ -19,7 +19,7 @@ export default function Registro() {
     setShowRequirementsAlert(false);
     setErrorMessage("");
 
-    if (senha.length < 10 || !/[a-z]/.test(senha) || !/[!@#?]/.test(senha)) {
+    if (senha.length < 10 || !/[a-z]/.test(senha)) {
       setShowRequirementsAlert(true);
       return;
     }
@@ -77,9 +77,7 @@ export default function Registro() {
           Registrar
         </button>
 
-        {errorMessage && (
-          <div className="mt-4 text-red-500">{errorMessage}</div>
-        )}
+        {errorMessage && <div className="mt-4 text-red-500">{errorMessage}</div>}
 
         {showRequirementsAlert && (
           <div
@@ -103,9 +101,6 @@ export default function Registro() {
               <ul className="mt-1.5 list-disc list-inside">
                 <li>Pelo menos 10 caracteres (e até 100 caracteres)</li>
                 <li>Pelo menos um caractere minúsculo</li>
-                <li>
-                  Inclusão de pelo menos um caractere especial, e.g., ! @ # ?
-                </li>
               </ul>
             </div>
           </div>
@@ -161,14 +156,14 @@ export default function Registro() {
                     />
                   </svg>
                   <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                    Cadastro concluído com sucesso! Seja bem vindo
+                    Cadastro concluído com sucesso! Seja bem-vindo!
                   </h3>
                   <button
                     type="button"
                     className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     onClick={() => {
                       setIsModalVisible(false);
-                      router.push("/pagina-logada", { scroll: false }); 
+                      router.push("/pagina-logada", { scroll: false });
                     }}
                   >
                     Continuar
