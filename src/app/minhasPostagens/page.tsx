@@ -59,10 +59,12 @@ export default function MinhasPostagens() {
 
         const data = await response.json();
         setPostagens(data);
-      } catch (error: any) {
-        console.error("Erro ao conectar-se à API:", error.message);
-        setError(error.message || "Erro ao carregar postagens");
+      } catch (error) {
+        const err = error as Error;
+        console.error("Erro ao conectar-se à API:", err.message);
+        setError(err.message || "Erro ao carregar postagens");
       }
+
     };
 
     if (!isLoading) {
@@ -108,7 +110,7 @@ export default function MinhasPostagens() {
         }, 500);
       } else {
         const errorData = await response.json();
-        setModalMessage(errorData.error || "Erro ao alterar postagem."); 
+        setModalMessage(errorData.error || "Erro ao alterar postagem.");
         setShowSuccessModal(true);
       }
     } catch (error) {
