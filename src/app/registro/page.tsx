@@ -29,7 +29,7 @@ export default function Registro() {
       const token = response.token;
       setToken(token);
       setIsModalVisible(true);
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
