@@ -50,34 +50,31 @@ export default function RootLayout({
 
   return (
     <AuthProvider>
-      <html lang="pt-br">
-  <body
-    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-  >
-    <Head>
-      <script
-        type="text/javascript"
-        id="hs-script-loader"
-        async
-        defer
-        src="https://js-na1.hs-scripts.com/50069560.js"
-      ></script>
-    </Head>
+      <Head>
+        <script
+          type="text/javascript"
+          id="hs-script-loader"
+          async
+          defer
+          src="https://js-na1.hs-scripts.com/50069560.js"
+        ></script>
+      </Head>
 
-    <LayoutContent
-      estadoId={estadoId}
-      cidadeId={cidadeId}
-      onFiltrar={handleFiltrar}
-      onRemoverFiltro={handleRemoverFiltro}
-      criarPostagem={criarPostagem}
-      minhasPostagensPage={minhasPostagensPage}
-      postagemDetalhePage={postagemDetalhePage}
-    >
-      {children}
-    </LayoutContent>
-  </body>
-</html>
-
+      <div
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <LayoutContent
+          estadoId={estadoId}
+          cidadeId={cidadeId}
+          onFiltrar={handleFiltrar}
+          onRemoverFiltro={handleRemoverFiltro}
+          criarPostagem={criarPostagem}
+          minhasPostagensPage={minhasPostagensPage}
+          postagemDetalhePage={postagemDetalhePage}
+        >
+          {children}
+        </LayoutContent>
+      </div>
     </AuthProvider>
   );
 }
@@ -93,14 +90,26 @@ const LayoutContent = (props: {
   postagemDetalhePage: boolean;
 }) => {
   const { isAuthenticated } = useAuth();
-  const { children, estadoId, cidadeId, onFiltrar, onRemoverFiltro, criarPostagem, minhasPostagensPage, postagemDetalhePage } = props;
+  const {
+    children,
+    estadoId,
+    cidadeId,
+    onFiltrar,
+    onRemoverFiltro,
+    criarPostagem,
+    minhasPostagensPage,
+    postagemDetalhePage,
+  } = props;
 
   return (
     <>
       <Navbar onFiltrar={onFiltrar} onRemoverFiltro={onRemoverFiltro} />
-      {isAuthenticated && !criarPostagem && !minhasPostagensPage && !postagemDetalhePage && (
-        <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />
-      )}
+      {isAuthenticated &&
+        !criarPostagem &&
+        !minhasPostagensPage &&
+        !postagemDetalhePage && (
+          <ListaPostagens estadoId={estadoId} cidadeId={cidadeId} />
+        )}
       {children}
       <Footer />
     </>
