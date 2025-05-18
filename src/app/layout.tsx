@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./components/AuthContext";
 import ClientLayout from "./components/ClientLayout";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,13 +27,11 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <head>
-        <script
-          type="text/javascript"
-          id="hs-script-loader"
-          async
-          defer
-          src="https://js-na1.hs-scripts.com/50069560.js"
-        ></script>
+      <Script
+        strategy="afterInteractive"
+        id="hs-script-loader"
+        src="//js-na1.hs-scripts.com/50069658.js"
+      />
       </head>
       <body>
         <AuthProvider>
