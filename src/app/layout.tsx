@@ -26,17 +26,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <body>
+      <head>
         <Script
           strategy="afterInteractive"
           id="hs-script-loader"
           src="https://js-na1.hs-scripts.com/50069658.js"
         />
+      </head>
+      <body>
         <AuthProvider>
           <ClientLayout>{children}</ClientLayout>
         </AuthProvider>
       </body>
-
     </html>
   );
 }
