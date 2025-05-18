@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import ListaPostagens from "./components/ListarPostagens";
 import { usePathname } from "next/navigation";
 import Footer from "./components/footer";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,31 +51,33 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="pt-br">
-        <head>
-          <script
-            type="text/javascript"
-            id="hs-script-loader"
-            async
-            defer
-            src="https://js-na1.hs-scripts.com/50069560.js"
-          ></script>
-        </head>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <LayoutContent
-            estadoId={estadoId}
-            cidadeId={cidadeId}
-            onFiltrar={handleFiltrar}
-            onRemoverFiltro={handleRemoverFiltro}
-            criarPostagem={criarPostagem}
-            minhasPostagensPage={minhasPostagensPage}
-            postagemDetalhePage={postagemDetalhePage}
-          >
-            {children}
-          </LayoutContent>
-        </body>
-      </html>
+  <body
+    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+  >
+    <Head>
+      <script
+        type="text/javascript"
+        id="hs-script-loader"
+        async
+        defer
+        src="https://js-na1.hs-scripts.com/50069560.js"
+      ></script>
+    </Head>
+
+    <LayoutContent
+      estadoId={estadoId}
+      cidadeId={cidadeId}
+      onFiltrar={handleFiltrar}
+      onRemoverFiltro={handleRemoverFiltro}
+      criarPostagem={criarPostagem}
+      minhasPostagensPage={minhasPostagensPage}
+      postagemDetalhePage={postagemDetalhePage}
+    >
+      {children}
+    </LayoutContent>
+  </body>
+</html>
+
     </AuthProvider>
   );
 }
