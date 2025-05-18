@@ -50,6 +50,15 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="pt-br">
+        <head>
+          <script
+            type="text/javascript"
+            id="hs-script-loader"
+            async
+            defer
+            src="https://js-na1.hs-scripts.com/50069560.js"
+          ></script>
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
